@@ -1,55 +1,151 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UK Tax Calculator 2023/24</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         :root {
-            --primary-color: #4361ee;
-            --primary-hover: #3a56d4;
+            /* Light mode colors */
             --bg-color: #f8f9fa;
             --card-bg: #ffffff;
-            --border-radius: 8px;
-            --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
-            --border-color: #e9ecef;
             --text-color: #212529;
-            --text-muted: #6c757d;
-            --input-bg: #ffffff;
-            --input-border: #ced4da;
-            --accent-color: rgba(67, 97, 238, 0.05);
+            --border-color: #dee2e6;
+            --input-bg: #fff;
+            --primary-color: #0d6efd;
+            --accent-color: #e9ecef;
+            --success-color: #198754;
+            --danger-color: #dc3545;
+            --border-radius: 8px;
         }
         
-        [data-theme="dark"] {
-            --primary-color: #6c8eff;
-            --primary-hover: #5a7dff;
-            --bg-color: #1a1a1a;
-            --card-bg: #2d2d2d;
-            --border-color: #404040;
-            --text-color: #e0e0e0;
-            --text-muted: #a0a0a0;
-            --input-bg: #3d3d3d;
-            --input-border: #505050;
-            --accent-color: rgba(108, 142, 255, 0.1);
-            --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+        /* Dark mode colors */
+        .dark-mode {
+            --bg-color: #212529;
+            --card-bg: #343a40;
+            --text-color: #f8f9fa;
+            --border-color: #495057;
+            --input-bg: #2b3035;
+            --primary-color: #0d6efd;
+            --accent-color: #495057;
+            --success-color: #198754;
+            --danger-color: #dc3545;
         }
         
-        body { 
-            padding: 20px;
+        body {
             background-color: var(--bg-color);
-            font-family: 'Segoe UI', Arial, sans-serif;
             color: var(--text-color);
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.5;
+            padding: 15px;
         }
         
+        /* Mobile-first approach */
         .calculator-container {
-            max-width: 850px;
+            max-width: 100%;
             margin: 0 auto;
+            padding: 10px;
+        }
+        
+        .calculator-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .calculator-form {
             background-color: var(--card-bg);
-            padding: 30px;
             border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            padding: 15px;
+            width: 100%;
+        }
+        
+        .results-section {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            padding: 15px;
+            width: 100%;
+        }
+        
+        /* Mobile specific styles */
+        .month-grid {
+            display: grid;
+            grid-template-columns: 30% 70% 0%;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        
+        .income-grid {
+            display: grid;
+            grid-template-columns: 30% 70% 0%;
+            gap: 10px;
+            align-items: flex-start;
+            padding: 5px 0;
+        }
+        
+        /* Hide the method column on mobile */
+        .calculation-method-column {
+            display: none;
+        }
+        
+        /* Make inputs and labels larger for touch on mobile */
+        input, select, button, .form-label, .form-check-label {
+            font-size: 16px !important; /* Prevent iOS zoom on focus */
+        }
+        
+        /* Stack the two columns in the row for mobile */
+        .row.mb-4 > .col-md-6 {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        /* Tablet and desktop media query */
+        @media (min-width: 768px) {
+            .calculator-container {
+                max-width: 1200px;
+                padding: 20px;
+            }
+            
+            .calculator-layout {
+                flex-direction: row;
+            }
+            
+            .calculator-form {
+                width: 60%;
+                padding: 25px;
+            }
+            
+            .results-section {
+                width: 40%;
+                padding: 25px;
+            }
+            
+            .month-grid {
+                grid-template-columns: 20% 50% 30%;
+                gap: 15px;
+            }
+            
+            .income-grid {
+                grid-template-columns: 20% 50% 30%;
+                gap: 15px;
+            }
+            
+            /* Show the method column on desktop */
+            .calculation-method-column {
+                display: block;
+            }
+            
+            /* Restore two-column layout for desktop */
+            .row.mb-4 > .col-md-6 {
+                width: 50%;
+                margin-bottom: 0;
+            }
         }
         
         h2, h4 {
@@ -118,18 +214,31 @@
             margin-bottom: 30px;
         }
         
+        /* Make the month header more mobile-friendly */
         .month-header {
             padding-bottom: 8px;
             margin-bottom: 8px;
             border-bottom: 1px solid var(--border-color);
         }
         
-        .month-label {
-            font-size: 14px;
+        /* Add visible month labels on mobile inside the input groups */
+        .mobile-month-label {
+            font-size: 12px;
             color: #6c757d;
             text-align: center;
-            padding: 0;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
+            display: block;
+        }
+        
+        @media (min-width: 768px) {
+            .mobile-month-label {
+                display: none; /* Hide on desktop */
+            }
+        }
+
+        /* Make input groups more mobile-friendly */
+        .input-group-sm {
+            width: 100%;
         }
         
         .income-type-label {
@@ -149,10 +258,6 @@
             color: #6c757d;
             text-align: center;
             padding: 0;
-        }
-        
-        .input-group-sm {
-            width: 100%;
         }
         
         .input-group-text {
@@ -841,6 +946,52 @@
         .income-type {
             min-width: 120px;
         }
+        
+        /* Additional mobile optimizations */
+        .month-values {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 5px; /* Smaller gap on mobile */
+            margin-bottom: 0;
+        }
+        
+        @media (min-width: 768px) {
+            .month-values {
+                gap: 10px; /* Larger gap on desktop */
+            }
+        }
+        
+        /* Make the breakdown sections more mobile-friendly */
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 10px;
+            font-size: 14px;
+        }
+        
+        /* Improve spacing on mobile */
+        .result-row {
+            padding: 8px 0;
+        }
+        
+        /* Make the results cards more compact on mobile */
+        .results-card, .annual-summary {
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        @media (min-width: 768px) {
+            .results-card, .annual-summary {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+        }
+        
+        /* Mobile-friendly toggle icons */
+        .breakdown-toggle-icon {
+            font-size: 16px;
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
@@ -894,14 +1045,17 @@
                                         <div id="basicMonthlyInputs" style="display: none;">
                                             <div class="income-values">
                                                 <div class="input-group input-group-sm">
+                                                    <span class="d-block d-md-none mobile-month-label" id="mobileMonth2Label">Mar 25</span>
                                                     <span class="input-group-text">£</span>
                                                     <input type="number" class="form-control" data-type="basic" data-month="2">
                                                 </div>
                                                 <div class="input-group input-group-sm">
+                                                    <span class="d-block d-md-none mobile-month-label" id="mobileMonth1Label">Feb 25</span>
                                                     <span class="input-group-text">£</span>
                                                     <input type="number" class="form-control" data-type="basic" data-month="1">
                                                 </div>
                                                 <div class="input-group input-group-sm">
+                                                    <span class="d-block d-md-none mobile-month-label" id="mobileMonth0Label">Jan 25</span>
                                                     <span class="input-group-text">£</span>
                                                     <input type="number" class="form-control" data-type="basic" data-month="0">
                                                 </div>
@@ -926,20 +1080,23 @@
                                     <div>
                                         <div class="income-values">
                                             <div class="input-group input-group-sm">
+                                                <span class="d-block d-md-none mobile-month-label" id="mobileMonth2Label">Mar 25</span>
                                                 <span class="input-group-text">£</span>
                                                 <input type="number" class="form-control" data-type="bonus" data-month="2">
                                             </div>
                                             <div class="input-group input-group-sm">
+                                                <span class="d-block d-md-none mobile-month-label" id="mobileMonth1Label">Feb 25</span>
                                                 <span class="input-group-text">£</span>
                                                 <input type="number" class="form-control" data-type="bonus" data-month="1">
                                             </div>
                                             <div class="input-group input-group-sm">
+                                                <span class="d-block d-md-none mobile-month-label" id="mobileMonth0Label">Jan 25</span>
                                                 <span class="input-group-text">£</span>
                                                 <input type="number" class="form-control" data-type="bonus" data-month="0">
                                             </div>
                                         </div>
                                     </div>
-                                    <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;">
+                                    <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;" class="calculation-method-column">
                                         <select class="form-select form-select-sm calculation-method" data-type="bonus" style="max-width: 120px;">
                                             <option value="average">Average</option>
                                             <option value="lowest">Lowest</option>
@@ -970,7 +1127,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;">
+                                    <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;" class="calculation-method-column">
                                         <select class="form-select form-select-sm calculation-method" data-type="overtime" style="max-width: 120px;">
                                             <option value="average">Average</option>
                                             <option value="lowest">Lowest</option>
@@ -1001,7 +1158,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;">
+                                    <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;" class="calculation-method-column">
                                         <select class="form-select form-select-sm calculation-method" data-type="commission" style="max-width: 120px;">
                                             <option value="average">Average</option>
                                             <option value="lowest">Lowest</option>
@@ -1499,17 +1656,37 @@
         }
 
         function updateMonthLabels() {
-            const months = [];
-            const today = new Date();
+            const now = new Date();
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             
-            for (let i = 2; i >= 0; i--) {
-                const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
-                months.push(d.toLocaleString('default', { month: 'short', year: '2-digit' }));
-            }
+            const month3 = new Date(now);
+            month3.setMonth(now.getMonth() - 3);
+            const month2 = new Date(now);
+            month2.setMonth(now.getMonth() - 2);
+            const month1 = new Date(now);
+            month1.setMonth(now.getMonth() - 1);
             
-            document.getElementById('month3Label').textContent = months[0];
-            document.getElementById('month2Label').textContent = months[1];
-            document.getElementById('month1Label').textContent = months[2];
+            // Update main month labels at top
+            document.getElementById('month3Label').textContent = `${monthNames[month3.getMonth()]} ${month3.getFullYear().toString().substr(2)}`;
+            document.getElementById('month2Label').textContent = `${monthNames[month2.getMonth()]} ${month2.getFullYear().toString().substr(2)}`;
+            document.getElementById('month1Label').textContent = `${monthNames[month1.getMonth()]} ${month1.getFullYear().toString().substr(2)}`;
+            
+            // Update all mobile month labels
+            const month3Text = `${monthNames[month3.getMonth()]} ${month3.getFullYear().toString().substr(2)}`;
+            const month2Text = `${monthNames[month2.getMonth()]} ${month2.getFullYear().toString().substr(2)}`;
+            const month1Text = `${monthNames[month1.getMonth()]} ${month1.getFullYear().toString().substr(2)}`;
+            
+            document.querySelectorAll('#mobileMonth2Label').forEach(label => {
+                label.textContent = month3Text;
+            });
+            
+            document.querySelectorAll('#mobileMonth1Label').forEach(label => {
+                label.textContent = month2Text;
+            });
+            
+            document.querySelectorAll('#mobileMonth0Label').forEach(label => {
+                label.textContent = month1Text;
+            });
         }
 
         function createAdditionalIncomeRow(id) {
@@ -2253,7 +2430,7 @@
         }
     </script>
     <div class="text-center mt-4 mb-2" style="font-size: 0.8rem; color: #999;">
-        Version 1.3
+        Version 1.4 (Mobile Optimized)
     </div>
 </body>
 </html>
