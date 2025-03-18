@@ -822,6 +822,12 @@
             font-size: 18px;
             line-height: 1;
         }
+
+        /* Remove method-label styling */
+        
+        .income-type {
+            min-width: 120px;
+        }
     </style>
 </head>
 <body>
@@ -851,9 +857,6 @@
                                     <div class="month-label" id="month3Label">Mar 25</div>
                                     <div class="month-label" id="month2Label">Feb 25</div>
                                     <div class="month-label" id="month1Label">Jan 25</div>
-                                </div>
-                                <div>
-                                    <label class="method-label">Method</label>
                                 </div>
                             </div>
                         </div>
@@ -1196,7 +1199,10 @@
                         <div class="result-row">
                             <span>Basic Salary</span>
                             <span>
-                                <span id="monthlyBasic">£0.00</span>
+                                <span class="copyable-number" onclick="copyNumber(this)">
+                                    <span id="monthlyBasic">£0.00</span>
+                                    <span class="copy-tooltip">Copied!</span>
+                                </span>
                             </span>
                         </div>
                         <div class="result-row">
@@ -1210,7 +1216,10 @@
                                         <div class="toggle-switch-thumb"></div>
                                     </div>
                                 </div>
-                                <span id="monthlyVariable">£0.00</span>
+                                <span class="copyable-number" onclick="copyNumber(this)">
+                                    <span id="monthlyVariable">£0.00</span>
+                                    <span class="copy-tooltip">Copied!</span>
+                                </span>
                             </span>
                         </div>
                         <div class="variable-breakdown" id="variableBreakdown"></div>
@@ -1222,13 +1231,19 @@
                                         <div class="toggle-switch-thumb"></div>
                                     </div>
                                 </div>
-                                <span id="monthlyNonMonthlyBonus">£0.00</span>
+                                <span class="copyable-number" onclick="copyNumber(this)">
+                                    <span id="monthlyNonMonthlyBonus">£0.00</span>
+                                    <span class="copy-tooltip">Copied!</span>
+                                </span>
                             </span>
                         </div>
                         <div class="result-row">
                             <span>Total Gross Pay</span>
                             <span>
-                                <span id="grossPay">£0.00</span>
+                                <span class="copyable-number" onclick="copyNumber(this)">
+                                    <span id="grossPay">£0.00</span>
+                                    <span class="copy-tooltip">Copied!</span>
+                                </span>
                             </span>
                         </div>
                         <div class="result-row">
@@ -1237,39 +1252,57 @@
                                 <i class="bi bi-chevron-right breakdown-toggle-icon" id="deductionsBreakdownIcon"></i>
                             </span>
                             <span>
-                                <span id="totalDeductions">£0.00</span>
+                                <span class="copyable-number" onclick="copyNumber(this)">
+                                    <span id="totalDeductions">£0.00</span>
+                                    <span class="copy-tooltip">Copied!</span>
+                                </span>
                             </span>
                         </div>
                         <div class="deductions-breakdown" id="deductionsBreakdown">
                             <div class="breakdown-item">
                                 <span>Income Tax</span>
                                 <span>
-                                    <span id="tax">£0.00</span>
+                                    <span class="copyable-number" onclick="copyNumber(this)">
+                                        <span id="tax">£0.00</span>
+                                        <span class="copy-tooltip">Copied!</span>
+                                    </span>
                                 </span>
                             </div>
                             <div class="breakdown-item">
                                 <span>National Insurance</span>
                                 <span>
-                                    <span id="ni">£0.00</span>
+                                    <span class="copyable-number" onclick="copyNumber(this)">
+                                        <span id="ni">£0.00</span>
+                                        <span class="copy-tooltip">Copied!</span>
+                                    </span>
                                 </span>
                             </div>
                         </div>
                         <div class="result-row" id="studentLoanRow">
                             <span>Student Loan</span>
                             <span>
-                                <span id="studentLoanAmount">£0.00</span>
+                                <span class="copyable-number" onclick="copyNumber(this)">
+                                    <span id="studentLoanAmount">£0.00</span>
+                                    <span class="copy-tooltip">Copied!</span>
+                                </span>
                             </span>
                         </div>
                         <div class="result-row" id="pensionRow">
                             <span>Pension Contribution</span>
                             <span>
-                                <span id="pensionAmount">£0.00</span>
+                                <span class="copyable-number" onclick="copyNumber(this)">
+                                    <span id="pensionAmount">£0.00</span>
+                                    <span class="copy-tooltip">Copied!</span>
+                                </span>
                             </span>
                         </div>
                         <div class="result-row fw-bold">
                             <span>Take Home Pay</span>
                             <span>
-                                <span id="netPay">£0.00</span>
+                                <span class="copyable-number" onclick="copyNumber(this)">
+                                    <span id="netPay">£0.00</span>
+                                    <span class="copy-tooltip">Copied!</span>
+                                </span>
                             </span>
                         </div>
                         
