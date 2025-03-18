@@ -2388,29 +2388,26 @@
         function initializeTheme() {
             const savedTheme = getCookie('theme');
             if (savedTheme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'dark');
+                document.body.classList.add('dark-mode');
                 document.getElementById('themeText').textContent = 'Dark Mode';
                 document.getElementById('themeIcon').className = 'bi bi-moon-fill';
             }
         }
 
         function toggleTheme() {
-            const root = document.documentElement;
-            const currentTheme = root.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? '' : 'dark';
+            const body = document.body;
+            const isDarkMode = body.classList.contains('dark-mode');
             
-            root.setAttribute('data-theme', newTheme);
-            setCookie('theme', newTheme, 365); // Save preference for 1 year
-            
-            const themeIcon = document.getElementById('themeIcon');
-            const themeText = document.getElementById('themeText');
-            
-            if (newTheme === 'dark') {
-                themeIcon.className = 'bi bi-moon-fill';
-                themeText.textContent = 'Dark Mode';
+            if (isDarkMode) {
+                body.classList.remove('dark-mode');
+                setCookie('theme', '', 365); // Save preference for 1 year
+                document.getElementById('themeIcon').className = 'bi bi-sun-fill';
+                document.getElementById('themeText').textContent = 'Light Mode';
             } else {
-                themeIcon.className = 'bi bi-sun-fill';
-                themeText.textContent = 'Light Mode';
+                body.classList.add('dark-mode');
+                setCookie('theme', 'dark', 365); // Save preference for 1 year
+                document.getElementById('themeIcon').className = 'bi bi-moon-fill';
+                document.getElementById('themeText').textContent = 'Dark Mode';
             }
         }
 
@@ -2721,7 +2718,7 @@
         }
     </script>
     <div class="text-center mt-4 mb-2" style="font-size: 0.8rem; color: #999;">
-        Version 2.0 (Redesigned UI)
+        Version 2.0.1 (Dark Mode Fix)
     </div>
 </body>
 </html>
