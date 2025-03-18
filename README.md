@@ -14,7 +14,7 @@ A web application that calculates UK income tax, National Insurance contribution
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/tax_calculator.git
+   git clone https://github.com/rcdavidson/tax_calculator.git
    cd tax_calculator
    ```
 
