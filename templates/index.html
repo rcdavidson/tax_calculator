@@ -992,6 +992,68 @@
             font-size: 16px;
             padding: 5px;
         }
+
+        /* Update mobile styles for better display */
+        @media (max-width: 767px) {
+            .month-header {
+                display: none; /* Hide the desktop month header on mobile */
+            }
+            
+            .income-grid {
+                grid-template-columns: 100%; /* Full width for inputs on mobile */
+                gap: 5px;
+            }
+            
+            .income-type-label {
+                font-weight: 500;
+                margin-bottom: 5px;
+                font-size: 16px;
+            }
+            
+            .income-values {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .mobile-month-label {
+                display: block;
+                text-align: left;
+                font-weight: 500;
+                margin-bottom: 4px;
+                color: var(--text-color);
+            }
+            
+            /* Style for calculation method on mobile */
+            .mobile-method-label {
+                display: block;
+                margin-top: 8px;
+                margin-bottom: 4px;
+                font-size: 14px;
+                color: #6c757d;
+            }
+            
+            .calculation-method-mobile {
+                width: 100%;
+                max-width: none;
+                margin-top: 5px;
+                margin-bottom: 15px;
+            }
+            
+            /* Add spacing between income rows on mobile */
+            .income-row {
+                padding: 15px 0;
+                margin-bottom: 0;
+                border-bottom: 1px solid var(--border-color);
+            }
+            
+            /* Fix spacing on basic salary type selector */
+            #basicSalaryType {
+                width: 100%;
+                max-width: none;
+                margin-top: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1096,6 +1158,14 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- Add method selection for mobile -->
+                                    <div class="d-block d-md-none mt-2 mb-3">
+                                        <div class="mobile-method-label">Calculation Method:</div>
+                                        <select class="form-select calculation-method-mobile" data-type="bonus">
+                                            <option value="average">Average</option>
+                                            <option value="lowest">Lowest</option>
+                                        </select>
+                                    </div>
                                     <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;" class="calculation-method-column">
                                         <select class="form-select form-select-sm calculation-method" data-type="bonus" style="max-width: 120px;">
                                             <option value="average">Average</option>
@@ -1114,18 +1184,29 @@
                                     <div>
                                         <div class="income-values">
                                             <div class="input-group input-group-sm">
+                                                <span class="d-block d-md-none mobile-month-label" id="mobileMonth2Label">Mar 25</span>
                                                 <span class="input-group-text">£</span>
                                                 <input type="number" class="form-control" data-type="overtime" data-month="2">
                                             </div>
                                             <div class="input-group input-group-sm">
+                                                <span class="d-block d-md-none mobile-month-label" id="mobileMonth1Label">Feb 25</span>
                                                 <span class="input-group-text">£</span>
                                                 <input type="number" class="form-control" data-type="overtime" data-month="1">
                                             </div>
                                             <div class="input-group input-group-sm">
+                                                <span class="d-block d-md-none mobile-month-label" id="mobileMonth0Label">Jan 25</span>
                                                 <span class="input-group-text">£</span>
                                                 <input type="number" class="form-control" data-type="overtime" data-month="0">
                                             </div>
                                         </div>
+                                    </div>
+                                    <!-- Add method selection for mobile -->
+                                    <div class="d-block d-md-none mt-2 mb-3">
+                                        <div class="mobile-method-label">Calculation Method:</div>
+                                        <select class="form-select calculation-method-mobile" data-type="overtime">
+                                            <option value="average">Average</option>
+                                            <option value="lowest">Lowest</option>
+                                        </select>
                                     </div>
                                     <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;" class="calculation-method-column">
                                         <select class="form-select form-select-sm calculation-method" data-type="overtime" style="max-width: 120px;">
@@ -1145,18 +1226,29 @@
                                     <div>
                                         <div class="income-values">
                                             <div class="input-group input-group-sm">
+                                                <span class="d-block d-md-none mobile-month-label" id="mobileMonth2Label">Mar 25</span>
                                                 <span class="input-group-text">£</span>
                                                 <input type="number" class="form-control" data-type="commission" data-month="2">
                                             </div>
                                             <div class="input-group input-group-sm">
+                                                <span class="d-block d-md-none mobile-month-label" id="mobileMonth1Label">Feb 25</span>
                                                 <span class="input-group-text">£</span>
                                                 <input type="number" class="form-control" data-type="commission" data-month="1">
                                             </div>
                                             <div class="input-group input-group-sm">
+                                                <span class="d-block d-md-none mobile-month-label" id="mobileMonth0Label">Jan 25</span>
                                                 <span class="input-group-text">£</span>
                                                 <input type="number" class="form-control" data-type="commission" data-month="0">
                                             </div>
                                         </div>
+                                    </div>
+                                    <!-- Add method selection for mobile -->
+                                    <div class="d-block d-md-none mt-2 mb-3">
+                                        <div class="mobile-method-label">Calculation Method:</div>
+                                        <select class="form-select calculation-method-mobile" data-type="commission">
+                                            <option value="average">Average</option>
+                                            <option value="lowest">Lowest</option>
+                                        </select>
                                     </div>
                                     <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;" class="calculation-method-column">
                                         <select class="form-select form-select-sm calculation-method" data-type="commission" style="max-width: 120px;">
@@ -1701,23 +1793,34 @@
                     <div>
                         <div class="income-values">
                             <div class="input-group input-group-sm">
+                                <span class="d-block d-md-none mobile-month-label" id="mobileMonth2Label">Mar 25</span>
                                 <span class="input-group-text">£</span>
                                 <input type="number" class="form-control" 
                                        data-type="custom-${id}" data-month="2">
                             </div>
                             <div class="input-group input-group-sm">
+                                <span class="d-block d-md-none mobile-month-label" id="mobileMonth1Label">Feb 25</span>
                                 <span class="input-group-text">£</span>
                                 <input type="number" class="form-control" 
                                        data-type="custom-${id}" data-month="1">
                             </div>
                             <div class="input-group input-group-sm">
+                                <span class="d-block d-md-none mobile-month-label" id="mobileMonth0Label">Jan 25</span>
                                 <span class="input-group-text">£</span>
                                 <input type="number" class="form-control" 
                                        data-type="custom-${id}" data-month="0">
                             </div>
                         </div>
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding-left: 15px; padding-right: 15px;">
+                    <!-- Add mobile method selector -->
+                    <div class="d-block d-md-none mt-2 mb-3">
+                        <div class="mobile-method-label">Calculation Method:</div>
+                        <select class="form-select calculation-method-mobile" data-type="custom-${id}">
+                            <option value="average">Average</option>
+                            <option value="lowest">Lowest</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding-left: 15px; padding-right: 15px;" class="calculation-method-column">
                         <select class="form-select form-select-sm calculation-method" data-type="custom-${id}" style="max-width: 120px;">
                             <option value="average">Average</option>
                             <option value="lowest">Lowest</option>
@@ -1874,7 +1977,6 @@
             // Show variable breakdown by default
             variableBreakdown.style.display = 'block';
             variableBreakdownIcon.classList.add('open');
-            
             variableBreakdownIcon.addEventListener('click', function() {
                 const isVisible = variableBreakdown.style.display === 'block';
                 variableBreakdown.style.display = isVisible ? 'none' : 'block';
@@ -1915,6 +2017,26 @@
             // Hide variable breakdown by default
             variableBreakdown.style.display = 'none';
             variableBreakdownIcon.classList.remove('open');
+            
+            // Sync desktop and mobile method selections
+            document.querySelectorAll('.calculation-method, .calculation-method-mobile').forEach(select => {
+                select.addEventListener('change', function() {
+                    // Get the data type of the changed select
+                    const type = this.dataset.type;
+                    // Determine if this is the mobile or desktop version
+                    const isMobile = this.classList.contains('calculation-method-mobile');
+                    
+                    // Find the corresponding select to update
+                    const targetSelect = isMobile 
+                        ? document.querySelector(`.calculation-method[data-type="${type}"]`)
+                        : document.querySelector(`.calculation-method-mobile[data-type="${type}"]`);
+                    
+                    // Sync the values
+                    if (targetSelect) {
+                        targetSelect.value = this.value;
+                    }
+                });
+            });
         };
 
         function calculateTrueBonus() {
@@ -2430,7 +2552,7 @@
         }
     </script>
     <div class="text-center mt-4 mb-2" style="font-size: 0.8rem; color: #999;">
-        Version 1.4 (Mobile Optimized)
+        Version 1.5 (Enhanced Mobile UI)
     </div>
 </body>
 </html>
