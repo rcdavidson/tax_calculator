@@ -429,6 +429,9 @@
             background-color: var(--bg-color);
             border: 1px solid var(--border-color);
             color: var(--text-color);
+            font-weight: bold;
+            min-width: 120px;
+            padding: 8px 16px;
         }
 
         .reset-btn:hover {
@@ -1138,7 +1141,7 @@
                     <div class="text-center mt-4" style="width: 100%;">
                         <div class="d-flex gap-2 justify-content-center">
                             <button type="button" class="btn btn-secondary reset-btn" id="resetButton">
-                                Reset
+                                <strong>Reset</strong>
                             </button>
                         </div>
                         <div class="text-end mt-3 mb-2 update-timer" id="updateStatus">
@@ -2232,5 +2235,8 @@
             }, 1000);
         }
     </script>
+    <div class="text-center mt-4 mb-2" style="font-size: 0.8rem; color: #999;">
+        Version 1.1
+    </div>
 </body>
 </html>
