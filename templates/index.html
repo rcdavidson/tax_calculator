@@ -1054,6 +1054,36 @@
                 margin-top: 10px;
             }
         }
+        
+        /* Fix the ghost calculation method */
+        .calculation-method-mobile {
+            display: block;
+            width: 100%;
+        }
+        
+        /* Hide all desktop method selectors on mobile */
+        @media (max-width: 767px) {
+            .duplicate-method-hide {
+                display: none !important;
+            }
+            
+            /* Make annual selector full width on mobile */
+            #basicSalaryType {
+                width: 100%;
+                margin-top: 8px;
+                max-width: none;
+            }
+            
+            /* Format basic salary the same as other inputs on mobile */
+            #basicAnnualInput {
+                margin-bottom: 8px;
+            }
+            
+            /* Format the basic salary input container */
+            .basic-salary-mobile-container {
+                margin-bottom: 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1095,7 +1125,7 @@
                                     <div>
                                         <label class="income-type-label">Basic Salary</label>
                                     </div>
-                                    <div>
+                                    <div class="basic-salary-mobile-container">
                                         <!-- Annual Input (default) -->
                                         <div id="basicAnnualInput">
                                             <div class="input-group input-group-sm">
@@ -1123,9 +1153,17 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <!-- Add salary type selector for mobile -->
+                                        <div class="d-block d-md-none">
+                                            <div class="mobile-method-label">Salary Type:</div>
+                                            <select class="form-select" id="basicSalaryType">
+                                                <option value="annual">Annual</option>
+                                                <option value="monthly">Monthly</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;">
-                                        <select class="form-select form-select-sm" id="basicSalaryType" style="max-width: 120px;">
+                                    <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;" class="calculation-method-column">
+                                        <select class="form-select form-select-sm duplicate-method-hide" id="basicSalaryTypeDesktop" style="max-width: 120px;">
                                             <option value="annual">Annual</option>
                                             <option value="monthly">Monthly</option>
                                         </select>
@@ -1167,7 +1205,7 @@
                                         </select>
                                     </div>
                                     <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;" class="calculation-method-column">
-                                        <select class="form-select form-select-sm calculation-method" data-type="bonus" style="max-width: 120px;">
+                                        <select class="form-select form-select-sm calculation-method duplicate-method-hide" data-type="bonus" style="max-width: 120px;">
                                             <option value="average">Average</option>
                                             <option value="lowest">Lowest</option>
                                         </select>
@@ -1209,7 +1247,7 @@
                                         </select>
                                     </div>
                                     <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;" class="calculation-method-column">
-                                        <select class="form-select form-select-sm calculation-method" data-type="overtime" style="max-width: 120px;">
+                                        <select class="form-select form-select-sm calculation-method duplicate-method-hide" data-type="overtime" style="max-width: 120px;">
                                             <option value="average">Average</option>
                                             <option value="lowest">Lowest</option>
                                         </select>
@@ -1251,7 +1289,7 @@
                                         </select>
                                     </div>
                                     <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;" class="calculation-method-column">
-                                        <select class="form-select form-select-sm calculation-method" data-type="commission" style="max-width: 120px;">
+                                        <select class="form-select form-select-sm calculation-method duplicate-method-hide" data-type="commission" style="max-width: 120px;">
                                             <option value="average">Average</option>
                                             <option value="lowest">Lowest</option>
                                         </select>
@@ -1821,7 +1859,7 @@
                         </select>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center; padding-left: 15px; padding-right: 15px;" class="calculation-method-column">
-                        <select class="form-select form-select-sm calculation-method" data-type="custom-${id}" style="max-width: 120px;">
+                        <select class="form-select form-select-sm calculation-method duplicate-method-hide" data-type="custom-${id}" style="max-width: 120px;">
                             <option value="average">Average</option>
                             <option value="lowest">Lowest</option>
                         </select>
@@ -2550,9 +2588,53 @@
                 tooltip.classList.remove('show');
             }, 1000);
         }
+
+        // Add script to sync basic salary type selectors
+        if (document.getElementById('basicSalaryTypeDesktop')) {
+            document.getElementById('basicSalaryType').addEventListener('change', function() {
+                document.getElementById('basicSalaryTypeDesktop').value = this.value;
+                // Handle view changes
+                const annualInput = document.getElementById('basicAnnualInput');
+                const monthlyInputs = document.getElementById('basicMonthlyInputs');
+                
+                if (this.value === 'monthly') {
+                    annualInput.style.display = 'none';
+                    monthlyInputs.style.display = 'block';
+                    
+                    // Copy the annual value divided by 12 to all monthly inputs if annual has a value
+                    const annualValue = parseFloat(document.getElementById('basicAnnualSalary').value) || 0;
+                    if (annualValue > 0) {
+                        const monthlyValue = annualValue / 12;
+                        document.querySelectorAll('[data-type="basic"][data-month]').forEach(input => {
+                            input.value = monthlyValue.toFixed(2);
+                        });
+                    }
+                } else {
+                    annualInput.style.display = 'block';
+                    monthlyInputs.style.display = 'none';
+                    
+                    // Calculate average of monthly values and multiply by 12 for annual
+                    const monthlyInputValues = Array.from(document.querySelectorAll('[data-type="basic"][data-month]'))
+                        .map(input => parseFloat(input.value) || 0);
+                    
+                    if (monthlyInputValues.some(v => v > 0)) {
+                        const average = monthlyInputValues.reduce((a, b) => a + b, 0) / monthlyInputValues.length;
+                        document.getElementById('basicAnnualSalary').value = (average * 12).toFixed(2);
+                    }
+                }
+                
+                // Trigger calculation update
+                debounceCalculation();
+            });
+            
+            document.getElementById('basicSalaryTypeDesktop').addEventListener('change', function() {
+                document.getElementById('basicSalaryType').value = this.value;
+                document.getElementById('basicSalaryType').dispatchEvent(new Event('change'));
+            });
+        }
     </script>
     <div class="text-center mt-4 mb-2" style="font-size: 0.8rem; color: #999;">
-        Version 1.5 (Enhanced Mobile UI)
+        Version 1.6 (Fixed Mobile UI)
     </div>
 </body>
 </html>
