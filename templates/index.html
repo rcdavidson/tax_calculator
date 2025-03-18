@@ -213,11 +213,10 @@
         }
         
         .income-row {
-            background-color: #f0f7ff;
+            background-color: var(--card-bg);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-sm);
-            margin-bottom: 15px;
-            padding: 20px;
+            margin-bottom: 12px;
             overflow: hidden;
         }
         
@@ -1027,7 +1026,7 @@
             }
             
             .income-row {
-                background-color: #f0f7ff;
+                background-color: var(--accent-color);
                 padding: 15px;
                 margin-bottom: 15px;
                 border-radius: var(--border-radius);
@@ -1039,7 +1038,7 @@
                 text-align: left;
                 font-weight: 500;
                 margin-bottom: 8px;
-                color: #4361ee;
+                color: var(--text-color);
                 padding: 4px 0;
                 font-size: 14px;
             }
@@ -1048,7 +1047,7 @@
                 font-weight: 600;
                 margin-bottom: 12px;
                 font-size: 16px;
-                color: #4361ee;
+                color: var(--primary-color);
             }
             
             .income-values {
@@ -1076,7 +1075,7 @@
                 margin-top: 12px;
                 margin-bottom: 6px;
                 font-size: 14px;
-                color: #4361ee;
+                color: #5a67d8;
                 font-weight: 500;
             }
             
@@ -1090,7 +1089,7 @@
             
             /* Monthly Income heading */
             .additional-income h4 {
-                color: #4361ee;
+                color: var(--primary-color);
                 font-weight: 600;
                 margin-bottom: 20px;
                 font-size: 20px;
@@ -1170,79 +1169,6 @@
                 margin-bottom: 15px;
             }
         }
-        
-        /* Fix row layout for desktop view */
-        @media (min-width: 768px) {
-            /* Better layout for input grid */
-            .income-grid {
-                display: grid;
-                grid-template-columns: 150px 1fr 150px;
-                gap: 20px;
-                align-items: center;
-            }
-            
-            /* Month header layout */
-            .month-header {
-                padding-bottom: 10px;
-                margin-bottom: 15px;
-                border-bottom: 1px solid var(--border-color);
-            }
-            
-            .month-grid {
-                display: grid;
-                grid-template-columns: 150px 1fr 150px;
-                gap: 20px;
-                align-items: center;
-            }
-            
-            .month-values {
-                display: grid;
-                grid-template-columns: 1fr 1fr 1fr;
-                gap: 15px;
-            }
-            
-            .month-label {
-                font-size: 14px;
-                color: #4361ee;
-                text-align: center;
-                font-weight: 500;
-                margin-bottom: 6px;
-            }
-        }
-        
-        /* Monthly Income heading styling */
-        .calculator-form h4, .monthly-income-heading {
-            color: #4361ee;
-            font-weight: 600;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-        }
-        
-        /* Consistent income type colors */
-        .income-type-label, .income-type {
-            color: #4361ee;
-            font-weight: 600;
-        }
-        
-        /* Fix calculation method styles */
-        .calculation-method-container {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .calc-method-label {
-            font-size: 14px;
-            color: #4361ee;
-            margin-bottom: 5px;
-        }
-
-        /* Basic salary type label */
-        .salary-type-label {
-            font-size: 14px;
-            color: #4361ee;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
     </style>
 </head>
 <body>
@@ -1260,7 +1186,7 @@
             <div class="calculator-form">
                 <form id="calculatorForm">
                     <div class="additional-income mb-4">
-                        <h4 class="monthly-income-heading">Monthly Income</h4>
+                        <h4 class="mb-3">Monthly Income</h4>
                         
                         <!-- Month Labels Row -->
                         <div class="month-header">
@@ -1322,13 +1248,10 @@
                                         </div>
                                     </div>
                                     <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;" class="calculation-method-column">
-                                        <div class="calculation-method-container">
-                                            <div class="salary-type-label">Salary Type:</div>
-                                            <select class="form-select form-select-sm duplicate-method-hide" id="basicSalaryTypeDesktop" style="max-width: 120px;">
-                                                <option value="annual">Annual</option>
-                                                <option value="monthly">Monthly</option>
-                                            </select>
-                                        </div>
+                                        <select class="form-select form-select-sm duplicate-method-hide" id="basicSalaryTypeDesktop" style="max-width: 120px;">
+                                            <option value="annual">Annual</option>
+                                            <option value="monthly">Monthly</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -1367,13 +1290,10 @@
                                         </select>
                                     </div>
                                     <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;" class="calculation-method-column">
-                                        <div class="calculation-method-container">
-                                            <div class="calc-method-label">Calculation Method:</div>
-                                            <select class="form-select form-select-sm calculation-method duplicate-method-hide" data-type="bonus" style="max-width: 120px;">
-                                                <option value="average">Average</option>
-                                                <option value="lowest">Lowest</option>
-                                            </select>
-                                        </div>
+                                        <select class="form-select form-select-sm calculation-method duplicate-method-hide" data-type="bonus" style="max-width: 120px;">
+                                            <option value="average">Average</option>
+                                            <option value="lowest">Lowest</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -1412,8 +1332,6 @@
                                         </select>
                                     </div>
                                     <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;" class="calculation-method-column">
-                                        <div class="calculation-method-container">
-                                            <div class="calc-method-label">Calculation Method:</div>
                                         <select class="form-select form-select-sm calculation-method duplicate-method-hide" data-type="overtime" style="max-width: 120px;">
                                             <option value="average">Average</option>
                                             <option value="lowest">Lowest</option>
@@ -2803,7 +2721,7 @@
         }
     </script>
     <div class="text-center mt-4 mb-2" style="font-size: 0.8rem; color: #999;">
-        Version 2.1 (Improved UI)
+        Version 2.0 (Redesigned UI)
     </div>
 </body>
 </html>
