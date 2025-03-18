@@ -1,0 +1,2203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UK Tax Calculator 2023/24</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-radius: 8px;
+            --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+            --border-color: #e9ecef;
+            --text-color: #212529;
+            --text-muted: #6c757d;
+            --input-bg: #ffffff;
+            --input-border: #ced4da;
+            --accent-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        [data-theme="dark"] {
+            --primary-color: #6c8eff;
+            --primary-hover: #5a7dff;
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --border-color: #404040;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --input-bg: #3d3d3d;
+            --input-border: #505050;
+            --accent-color: rgba(108, 142, 255, 0.1);
+            --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+        }
+        
+        body { 
+            padding: 20px;
+            background-color: var(--bg-color);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: var(--text-color);
+            transition: background-color 0.3s ease;
+        }
+        
+        .calculator-container {
+            max-width: 850px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        h2, h4 {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .form-control, .form-select {
+            border: 1px solid var(--input-border);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border-radius: 4px;
+            transition: all 0.15s ease-in-out;
+            font-size: 14px;
+            height: auto;
+            padding: 0.375rem 0.5rem;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(var(--primary-rgb), 0.15);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+        }
+        
+        .results-card {
+            background-color: var(--bg-color);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            margin-top: 24px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .result-row:hover {
+            background-color: var(--accent-color);
+            padding-left: 10px;
+            padding-right: 10px;
+            margin: 0 -10px;
+            border-radius: 4px;
+        }
+        
+        .result-row:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .income-row {
+            padding: 10px 0;
+            margin-bottom: 5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .additional-income {
+            background-color: var(--bg-color);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+        }
+        
+        .month-header {
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .month-label {
+            font-size: 14px;
+            color: #6c757d;
+            text-align: center;
+            padding: 0;
+        }
+        
+        .income-type-label {
+            font-size: 14px;
+            padding-top: 6px;
+            font-weight: normal;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: 10px;
+            display: inline-block;
+        }
+        
+        .method-label {
+            font-size: 14px;
+            color: #6c757d;
+            text-align: center;
+            padding: 0;
+        }
+        
+        .input-group-sm {
+            width: 100%;
+        }
+        
+        .input-group-text {
+            background-color: var(--accent-color);
+            border: 1px solid var(--input-border);
+            color: var(--text-color);
+            border-right: none;
+            font-size: 14px;
+            height: 100%;
+            padding: 0.375rem 0.5rem;
+        }
+        
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        
+        .form-select-sm {
+            padding: 0.375rem 0.5rem;
+            font-size: 14px;
+        }
+        
+        .annual-summary {
+            background-color: var(--bg-color);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 24px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            background-color: transparent;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        #variableIncomeTotals {
+            display: none;
+        }
+        
+        /* New styles for improved alignment */
+        .income-grid {
+            display: grid;
+            grid-template-columns: 20% 50% 30%;
+            gap: 15px;
+            align-items: flex-start;
+            padding: 5px 0;
+        }
+        
+        .month-grid {
+            display: grid;
+            grid-template-columns: 20% 50% 30%;
+            gap: 15px;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        
+        .month-values {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .income-values {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+        
+        /* Style for Add Income button */
+        .add-income-btn {
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+            padding: 6px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+        
+        .add-income-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* Add styles for live results */
+        #results {
+            margin-top: 30px;
+            display: block; /* Show by default */
+        }
+        
+        .loading-indicator {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(67, 97, 238, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .updating {
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        .update-timer {
+            font-size: 12px;
+            color: #6c757d;
+            text-align: right;
+            margin-top: 5px;
+        }
+        
+        /* Add responsive layout styles */
+        .calculator-layout {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .results-section {
+            margin-top: 30px;
+        }
+        
+        /* Desktop layout (screen width >= 992px) */
+        @media (min-width: 992px) {
+            .calculator-layout {
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 30px;
+            }
+            
+            .calculator-form {
+                flex: 1;
+                max-width: 65%;
+            }
+            
+            .results-section {
+                flex: 1;
+                max-width: 35%;
+                margin-top: 0;
+                position: sticky;
+                top: 20px;
+            }
+            
+            .calculator-container {
+                max-width: 1200px;
+            }
+        }
+        
+        /* Notification styles */
+        .copy-notification {
+            position: fixed;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease-in-out;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            max-width: 90%;
+            text-align: center;
+            pointer-events: none;
+        }
+        
+        .copy-notification.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-10px);
+        }
+        
+        .copy-notification .bi {
+            margin-right: 8px;
+        }
+        
+        /* Individual value copy buttons */
+        .value-copy-btn {
+            cursor: pointer;
+            margin-left: 5px;
+            color: #6c757d;
+            transition: color 0.2s;
+        }
+        
+        .value-copy-btn:hover {
+            color: var(--primary-color);
+        }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--accent-color);
+        }
+
+        .theme-toggle i {
+            font-size: 16px;
+        }
+
+        /* Add styles for method dropdown */
+        .form-select-sm.calculation-method {
+            width: 100%;
+            max-width: 120px;
+            margin-top: 0;
+            height: 31px;
+        }
+
+        /* Adjust the basic salary type dropdown */
+        #basicSalaryType {
+            width: 100%;
+            max-width: 120px;
+            margin-top: 0;
+            height: 31px;
+        }
+
+        /* Adjust the annual input container */
+        #basicAnnualInput {
+            width: 100%;
+        }
+
+        /* Reset button styles */
+        .reset-btn {
+            margin-right: 10px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+
+        .reset-btn:hover {
+            background-color: var(--accent-color);
+            border-color: var(--primary-color);
+        }
+
+        /* Style for dropdown containers */
+        .dropdown-container {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            padding-right: 10px;
+        }
+
+        /* Update the income row styles */
+        .income-row {
+            padding: 10px 0;
+            margin-bottom: 5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .income-type-label {
+            font-size: 14px;
+            padding-top: 6px;
+            font-weight: normal;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        /* Tax breakdown styles */
+        .tax-breakdown {
+            padding: 0 10px;
+            margin-top: 24px !important;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .tax-breakdown h5 {
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        /* Fix padding for result rows in tax breakdown */
+        #taxBands .result-row {
+            margin: 0;
+            padding: 12px 0;
+        }
+
+        #taxBands .result-row:hover {
+            margin: 0 -10px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        /* Updated toggle styles - colored borders without switch effect */
+        .toggle-button {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-right: 5px;
+            user-select: none;
+        }
+
+        .toggle-include {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        .toggle-exclude {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        .toggle-active {
+            background-color: var(--primary-color);
+            color: white;
+            border: 1px solid var(--primary-color);
+        }
+
+        /* Always show breakdown icons */
+        .breakdown-toggle-icon {
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 14px;
+            transition: transform 0.3s ease;
+            display: inline-block; /* Always show */
+        }
+
+        /* Variable income breakdown styles */
+        .breakdown-toggle {
+            cursor: pointer;
+            color: var(--primary-color);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .breakdown-toggle:hover {
+            text-decoration: underline;
+        }
+
+        .breakdown-toggle i {
+            margin-right: 4px;
+            transition: transform 0.3s ease;
+        }
+
+        .breakdown-toggle.open i {
+            transform: rotate(90deg);
+        }
+
+        .variable-breakdown {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: var(--bg-color);
+            border-radius: var(--border-radius);
+            font-size: 13px;
+            display: none;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Updated variable breakdown styles */
+        .income-label-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .variable-breakdown {
+            margin: 0;
+            padding: 10px 0 10px 20px;
+            background-color: var(--bg-color);
+            border-radius: var(--border-radius);
+            font-size: 13px;
+            display: none;
+            border-left: 2px solid var(--border-color);
+            margin-left: 10px;
+        }
+
+        /* Simplified toggle styles */
+        .simple-toggle {
+            font-size: 13px;
+            color: var(--text-muted);
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s ease;
+        }
+
+        .simple-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .simple-toggle.active {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        /* Deductions breakdown styles */
+        .deductions-breakdown {
+            margin: 0;
+            padding: 10px 0 10px 20px;
+            background-color: var(--bg-color);
+            border-radius: var(--border-radius);
+            font-size: 13px;
+            display: none;
+            border-left: 2px solid var(--border-color);
+            margin-left: 10px;
+        }
+
+        /* Modern single toggle button styles */
+        .toggle-switch {
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            margin-right: 15px;
+            user-select: none;
+        }
+
+        .toggle-switch-label {
+            font-size: 13px;
+            font-weight: 500;
+            margin-right: 8px;
+            color: var(--text-color);
+        }
+
+        .toggle-switch-track {
+            position: relative;
+            width: 40px;
+            height: 20px;
+            background-color: rgba(220, 53, 69, 0.2);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        .toggle-switch-track.active {
+            background-color: rgba(40, 167, 69, 0.2);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        .toggle-switch-thumb {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 14px;
+            height: 14px;
+            background-color: #dc3545;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch-track.active .toggle-switch-thumb {
+            left: calc(100% - 16px);
+            background-color: #28a745;
+        }
+
+        .toggle-switch-status {
+            display: none;
+        }
+
+        /* Style for dropdown containers */
+        .dropdown-container {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            padding-right: 10px;
+        }
+
+        /* Adjust the basic salary type dropdown */
+        #basicSalaryType {
+            width: 100%;
+            max-width: 120px;
+            margin-top: 0;
+            height: 31px;
+        }
+
+        /* Add styles for method dropdown */
+        .form-select-sm.calculation-method {
+            width: 100%;
+            max-width: 120px;
+            margin-top: 0;
+            height: 31px;
+        }
+
+        /* Ensure all form-select elements in income-grid are aligned to the top */
+        .income-grid .form-select {
+            margin-top: 0;
+            height: 31px;
+        }
+
+        /* Add more padding to the student loan and pension sections */
+        .row.mb-4 {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        /* Ensure the income-grid aligns all items to the top and has proper spacing */
+        .income-grid {
+            display: grid;
+            grid-template-columns: 20% 50% 30%;
+            gap: 15px;
+            align-items: flex-start;
+            padding: 5px 0;
+        }
+
+        /* Ensure the month-grid aligns all items to the top */
+        .month-grid {
+            display: grid;
+            grid-template-columns: 20% 50% 30%;
+            gap: 15px;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        /* Add more aesthetic spacing to the form sections */
+        .additional-income {
+            background-color: var(--bg-color);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+        }
+
+        /* Adjust the student loan and pension sections */
+        .col-md-6 {
+            padding: 0 15px;
+        }
+
+        /* Adjust the height of all select elements to match inputs */
+        .form-select {
+            height: 38px;
+        }
+
+        .form-select-sm {
+            height: 31px;
+        }
+
+        /* Remove copy button styles and update for clickable numbers */
+        .copyable-number {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            display: inline-block;
+        }
+
+        .copyable-number:hover {
+            color: var(--primary-color);
+        }
+
+        .copy-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .copy-tooltip.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Remove old copy button styles */
+        .copy-btn,
+        .value-copy-btn {
+            display: none;
+        }
+
+        /* Improve the delete button styling */
+        .delete-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            color: #6c757d;
+            border: 1px solid #ced4da;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0;
+            font-size: 14px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+
+        .delete-btn:hover {
+            background-color: #f1f3f5;
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .delete-btn:active {
+            transform: translateY(1px);
+            box-shadow: none;
+        }
+
+        /* Replace X symbol with a Bootstrap icon */
+        .delete-btn i {
+            font-size: 18px;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Add theme toggle button -->
+    <button type="button" class="theme-toggle" id="themeToggle">
+        <i class="bi bi-sun-fill" id="themeIcon"></i>
+        <span id="themeText">Light Mode</span>
+    </button>
+
+    <div class="calculator-container">
+        <h2 class="text-center mb-4">UK Tax Calculator 2023/24</h2>
+        
+        <div class="calculator-layout">
+            <!-- Form Section -->
+            <div class="calculator-form">
+                <form id="calculatorForm">
+                    <div class="additional-income mb-4">
+                        <h4 class="mb-3">Monthly Income</h4>
+                        
+                        <!-- Month Labels Row -->
+                        <div class="month-header">
+                            <div class="month-grid">
+                                <div>
+                                    <label class="income-type-label">Income Type</label>
+                                </div>
+                                <div class="month-values">
+                                    <div class="month-label" id="month3Label">Mar 25</div>
+                                    <div class="month-label" id="month2Label">Feb 25</div>
+                                    <div class="month-label" id="month1Label">Jan 25</div>
+                                </div>
+                                <div>
+                                    <label class="method-label">Method</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fixed Income Rows -->
+                        <div class="income-rows">
+                            <!-- Basic Salary Row -->
+                            <div class="income-row">
+                                <div class="income-grid">
+                                    <div>
+                                        <label class="income-type-label">Basic Salary</label>
+                                    </div>
+                                    <div>
+                                        <!-- Annual Input (default) -->
+                                        <div id="basicAnnualInput">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text">£</span>
+                                                <input type="number" class="form-control" id="basicAnnualSalary" placeholder="Annual Salary">
+                                            </div>
+                                        </div>
+                                        <!-- Monthly Inputs (initially hidden) -->
+                                        <div id="basicMonthlyInputs" style="display: none;">
+                                            <div class="income-values">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-text">£</span>
+                                                    <input type="number" class="form-control" data-type="basic" data-month="2">
+                                                </div>
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-text">£</span>
+                                                    <input type="number" class="form-control" data-type="basic" data-month="1">
+                                                </div>
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-text">£</span>
+                                                    <input type="number" class="form-control" data-type="basic" data-month="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;">
+                                        <select class="form-select form-select-sm" id="basicSalaryType" style="max-width: 120px;">
+                                            <option value="annual">Annual</option>
+                                            <option value="monthly">Monthly</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bonus Row -->
+                            <div class="income-row">
+                                <div class="income-grid">
+                                    <div>
+                                        <label class="income-type-label">Bonus</label>
+                                    </div>
+                                    <div>
+                                        <div class="income-values">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text">£</span>
+                                                <input type="number" class="form-control" data-type="bonus" data-month="2">
+                                            </div>
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text">£</span>
+                                                <input type="number" class="form-control" data-type="bonus" data-month="1">
+                                            </div>
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text">£</span>
+                                                <input type="number" class="form-control" data-type="bonus" data-month="0">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;">
+                                        <select class="form-select form-select-sm calculation-method" data-type="bonus" style="max-width: 120px;">
+                                            <option value="average">Average</option>
+                                            <option value="lowest">Lowest</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Overtime Row -->
+                            <div class="income-row">
+                                <div class="income-grid">
+                                    <div>
+                                        <label class="income-type-label">Overtime</label>
+                                    </div>
+                                    <div>
+                                        <div class="income-values">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text">£</span>
+                                                <input type="number" class="form-control" data-type="overtime" data-month="2">
+                                            </div>
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text">£</span>
+                                                <input type="number" class="form-control" data-type="overtime" data-month="1">
+                                            </div>
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text">£</span>
+                                                <input type="number" class="form-control" data-type="overtime" data-month="0">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;">
+                                        <select class="form-select form-select-sm calculation-method" data-type="overtime" style="max-width: 120px;">
+                                            <option value="average">Average</option>
+                                            <option value="lowest">Lowest</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Commission Row -->
+                            <div class="income-row">
+                                <div class="income-grid">
+                                    <div>
+                                        <label class="income-type-label">Commission</label>
+                                    </div>
+                                    <div>
+                                        <div class="income-values">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text">£</span>
+                                                <input type="number" class="form-control" data-type="commission" data-month="2">
+                                            </div>
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text">£</span>
+                                                <input type="number" class="form-control" data-type="commission" data-month="1">
+                                            </div>
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text">£</span>
+                                                <input type="number" class="form-control" data-type="commission" data-month="0">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; justify-content: flex-start; align-items: center; padding-left: 15px;">
+                                        <select class="form-select form-select-sm calculation-method" data-type="commission" style="max-width: 120px;">
+                                            <option value="average">Average</option>
+                                            <option value="lowest">Lowest</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Monthly Totals (will be filled by JS) -->
+                            <div id="variableIncomeTotals"></div>
+                        </div>
+
+                        <!-- Additional Income Rows (Dynamic) -->
+                        <div id="additional-rows"></div>
+
+                        <!-- Add More Button -->
+                        <button type="button" class="add-income-btn" id="addIncomeRow">
+                            + Add Other Income
+                        </button>
+                    </div>
+
+                    <!-- Update pension section with £/% toggle -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Pension Contribution</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="pension" value="0" min="0">
+                                <select class="form-select" id="pensionType" style="max-width: 80px;">
+                                    <option value="percentage">%</option>
+                                    <option value="amount">£</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Student Loan Plan</label>
+                            <select class="form-select" id="studentLoan">
+                                <option value="None">None</option>
+                                <option value="Plan 1">Plan 1</option>
+                                <option value="Plan 2">Plan 2</option>
+                                <option value="Plan 4">Plan 4</option>
+                            </select>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="hasGraduateLoan">
+                                <label class="form-check-label" for="hasGraduateLoan">
+                                    Graduate Loan
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bonus Type Section -->
+                    <div class="bonus-section mb-4">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="hasBonus">
+                            <label class="form-check-label" for="hasBonus">
+                                Non-Monthly Bonus
+                            </label>
+                        </div>
+                        <div id="bonusOptions" style="display: none;">
+                            <div class="mb-3">
+                                <select class="form-select" id="bonusType">
+                                    <option value="annual">Annual (Last 2 Years)</option>
+                                    <option value="half-yearly">Half-Yearly (Last 2 Periods)</option>
+                                    <option value="quarterly">Quarterly (Last 4 Quarters)</option>
+                                </select>
+                            </div>
+                            <div id="annualBonusInputs" style="display: none;">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Previous Year</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">£</span>
+                                            <input type="number" class="form-control" id="previousYearBonus">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Current Year</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">£</span>
+                                            <input type="number" class="form-control" id="currentYearBonus">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="halfYearlyBonusInputs" style="display: none;">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Previous Period</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">£</span>
+                                            <input type="number" class="form-control" id="previousHalfBonus">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Current Period</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">£</span>
+                                            <input type="number" class="form-control" id="currentHalfBonus">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="quarterlyBonusInputs" style="display: none;">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Q1 (Most Recent)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">£</span>
+                                            <input type="number" class="form-control" id="q1Bonus">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Q2</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">£</span>
+                                            <input type="number" class="form-control" id="q2Bonus">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Q3</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">£</span>
+                                            <input type="number" class="form-control" id="q3Bonus">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Q4</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">£</span>
+                                            <input type="number" class="form-control" id="q4Bonus">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <select class="form-select" id="quarterlyBonusMethod">
+                                        <option value="last4">Average of Last 4 Quarters</option>
+                                        <option value="last3">Average of Last 3 Quarters</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status message -->
+                    <div class="text-center mt-4" style="width: 100%;">
+                        <div class="d-flex gap-2 justify-content-center">
+                            <button type="button" class="btn btn-secondary reset-btn" id="resetButton">
+                                Reset
+                            </button>
+                        </div>
+                        <div class="text-end mt-3 mb-2 update-timer" id="updateStatus">
+                            Calculations update automatically
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Results Section -->
+            <div class="results-section">
+                <!-- Annual Summary Section -->
+                <div class="annual-summary mb-4">
+                    <h4 class="mb-3">
+                        Annual Summary
+                    </h4>
+                    <div id="annualSummaryContent" class="summary-rows">
+                        <div class="result-row">
+                            <span>Basic Salary</span>
+                            <span class="copyable-number" onclick="copyNumber(this)">
+                                <span id="basicAnnual">£0.00</span>
+                                <span class="copy-tooltip">Copied!</span>
+                            </span>
+                        </div>
+                        <div class="result-row">
+                            <span class="income-label-container">
+                                <span>Variable Income</span>
+                                <i class="bi bi-chevron-right breakdown-toggle-icon" id="annualVariableBreakdownIcon"></i>
+                            </span>
+                            <span class="copyable-number" onclick="copyNumber(this)">
+                                <span id="variableAnnual">£0.00</span>
+                                <span class="copy-tooltip">Copied!</span>
+                            </span>
+                        </div>
+                        <div class="variable-breakdown" id="annualVariableBreakdown"></div>
+                        <div class="result-row">
+                            <span>Non-Monthly Bonus</span>
+                            <span class="copyable-number" onclick="copyNumber(this)">
+                                <span id="nonMonthlyBonus">£0.00</span>
+                                <span class="copy-tooltip">Copied!</span>
+                            </span>
+                        </div>
+                        <div class="result-row fw-bold">
+                            <span>Total Annual</span>
+                            <span>
+                                <span id="totalAnnual">£0.00</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monthly Breakdown -->
+                <div class="results-card">
+                    <h4 class="mb-4">
+                        Monthly Breakdown
+                    </h4>
+                    <div id="monthlyBreakdownContent">
+                        <div class="result-row">
+                            <span>Basic Salary</span>
+                            <span>
+                                <span id="monthlyBasic">£0.00</span>
+                            </span>
+                        </div>
+                        <div class="result-row">
+                            <span class="income-label-container">
+                                <span>Variable Income</span>
+                                <i class="bi bi-chevron-right breakdown-toggle-icon" id="variableBreakdownIcon"></i>
+                            </span>
+                            <span style="display: flex; align-items: center; justify-content: flex-end; gap: 15px;">
+                                <div class="toggle-switch active" id="variableToggle" onclick="toggleVariable()">
+                                    <div class="toggle-switch-track active">
+                                        <div class="toggle-switch-thumb"></div>
+                                    </div>
+                                </div>
+                                <span id="monthlyVariable">£0.00</span>
+                            </span>
+                        </div>
+                        <div class="variable-breakdown" id="variableBreakdown"></div>
+                        <div class="result-row">
+                            <span>Non-Monthly Bonus</span>
+                            <span style="display: flex; align-items: center; justify-content: flex-end; gap: 15px;">
+                                <div class="toggle-switch active" id="bonusToggle" onclick="toggleBonus()">
+                                    <div class="toggle-switch-track active">
+                                        <div class="toggle-switch-thumb"></div>
+                                    </div>
+                                </div>
+                                <span id="monthlyNonMonthlyBonus">£0.00</span>
+                            </span>
+                        </div>
+                        <div class="result-row">
+                            <span>Total Gross Pay</span>
+                            <span>
+                                <span id="grossPay">£0.00</span>
+                            </span>
+                        </div>
+                        <div class="result-row">
+                            <span class="income-label-container">
+                                <span>Deductions</span>
+                                <i class="bi bi-chevron-right breakdown-toggle-icon" id="deductionsBreakdownIcon"></i>
+                            </span>
+                            <span>
+                                <span id="totalDeductions">£0.00</span>
+                            </span>
+                        </div>
+                        <div class="deductions-breakdown" id="deductionsBreakdown">
+                            <div class="breakdown-item">
+                                <span>Income Tax</span>
+                                <span>
+                                    <span id="tax">£0.00</span>
+                                </span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span>National Insurance</span>
+                                <span>
+                                    <span id="ni">£0.00</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="result-row" id="studentLoanRow">
+                            <span>Student Loan</span>
+                            <span>
+                                <span id="studentLoanAmount">£0.00</span>
+                            </span>
+                        </div>
+                        <div class="result-row" id="pensionRow">
+                            <span>Pension Contribution</span>
+                            <span>
+                                <span id="pensionAmount">£0.00</span>
+                            </span>
+                        </div>
+                        <div class="result-row fw-bold">
+                            <span>Take Home Pay</span>
+                            <span>
+                                <span id="netPay">£0.00</span>
+                            </span>
+                        </div>
+                        
+                        <div class="tax-breakdown mt-4" id="taxBreakdown">
+                            <h5 class="mb-3">Tax Breakdown</h5>
+                            <div id="taxBands"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('calculatorForm');
+        const results = document.getElementById('results');
+
+        function formatCurrency(amount) {
+            return '£' + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+
+        let calculationTimeout;
+        let isCalculating = false;
+        
+        function debounceCalculation() {
+            // Clear any pending calculation
+            clearTimeout(calculationTimeout);
+            
+            // Update status to show calculations pending
+            document.getElementById('updateStatus').innerHTML = 'Updating calculations <div class="loading-indicator"></div>';
+            
+            // Set a new calculation to run after 500ms of inactivity
+            calculationTimeout = setTimeout(() => {
+                performCalculation();
+            }, 500);
+        }
+        
+        async function performCalculation() {
+            if (isCalculating) return;
+            isCalculating = true;
+            
+            try {
+                // Calculate basic salary
+                const basicSalaryType = document.getElementById('basicSalaryType').value;
+                let annualSalary;
+                let monthlyBasic;
+                
+                // IMPORTANT: Basic salary calculation
+                // If annual: divide by 12 to get monthly
+                // If monthly: average the inputs and multiply by 12 for annual
+                if (basicSalaryType === 'annual') {
+                    annualSalary = parseFloat(document.getElementById('basicAnnualSalary').value) || 0;
+                    monthlyBasic = annualSalary / 12;  // Convert annual to monthly
+                } else {
+                    const inputs = Array.from(document.querySelectorAll('[data-type="basic"][data-month]'));
+                    const values = inputs.map(input => parseFloat(input.value) || 0);
+                    monthlyBasic = values.reduce((a, b) => a + b, 0) / values.length;
+                    annualSalary = monthlyBasic * 12;  // Convert monthly to annual
+                }
+
+                // Calculate variable income (monthly)
+                const variableIncome = calculateAverages();
+                const monthlyVariable = variableIncome.total || 0;
+                
+                // Update the variable income breakdown
+                updateVariableBreakdown(variableIncome);
+                
+                // Calculate true bonus (annual amount)
+                const trueBonus = calculateTrueBonus();
+                const monthlyBonus = trueBonus / 12;  // Convert annual bonus to monthly
+                
+                // Get exclusion states
+                const excludeVariable = document.getElementById('excludeVariable')?.checked || false;
+                const excludeBonus = document.getElementById('excludeBonus')?.checked || false;
+                
+                // Update toggle states to match current exclusion settings
+                document.getElementById('includeVariableLabel')?.classList.toggle('toggle-active', !excludeVariable);
+                document.getElementById('excludeVariableLabel')?.classList.toggle('toggle-active', excludeVariable);
+                document.getElementById('includeBonusLabel')?.classList.toggle('toggle-active', !excludeBonus);
+                document.getElementById('excludeBonusLabel')?.classList.toggle('toggle-active', excludeBonus);
+                
+                // IMPORTANT: Calculate total monthly and annual
+                // Monthly = basic monthly + variable (if included) + monthly bonus (if included)
+                const totalMonthly = monthlyBasic + 
+                                   (excludeVariable ? 0 : monthlyVariable) + 
+                                   (excludeBonus ? 0 : monthlyBonus);
+                const totalAnnual = totalMonthly * 12;
+                
+                // Prepare data for API call
+                const data = {
+                    salary: totalAnnual,  // Send annual salary to API
+                    pension: parseFloat(document.getElementById('pension').value) || 0,
+                    pensionType: document.getElementById('pensionType').value,
+                    studentLoan: document.getElementById('studentLoan').value,
+                    graduateLoan: document.getElementById('hasGraduateLoan').checked
+                };
+                
+                // Make API call
+                const response = await fetch('/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    // IMPORTANT: Update monthly breakdown
+                    // All displayed values should be monthly amounts
+                    document.getElementById('monthlyBasic').textContent = formatCurrency(monthlyBasic);
+                    document.getElementById('monthlyVariable').textContent = formatCurrency(monthlyVariable);
+                    document.getElementById('monthlyNonMonthlyBonus').textContent = formatCurrency(monthlyBonus);
+                    document.getElementById('grossPay').textContent = formatCurrency(totalMonthly);
+                    
+                    // Tax deductions are returned as monthly amounts
+                    document.getElementById('tax').textContent = formatCurrency(result.result.tax_deduction);
+                    document.getElementById('ni').textContent = formatCurrency(result.result.ni_deduction);
+                    document.getElementById('studentLoanAmount').textContent = formatCurrency(result.result.student_loan_deduction);
+                    document.getElementById('pensionAmount').textContent = formatCurrency(result.result.pension_deduction);
+                    
+                    // Calculate and display total deductions
+                    const totalDeductions = result.result.tax_deduction + 
+                                           result.result.ni_deduction + 
+                                           result.result.student_loan_deduction + 
+                                           result.result.pension_deduction;
+                    document.getElementById('totalDeductions').textContent = formatCurrency(totalDeductions);
+                    
+                    // Always show deductions icon
+                    document.getElementById('deductionsBreakdownIcon').style.display = 'inline-block';
+                    
+                    document.getElementById('netPay').textContent = formatCurrency(result.result.net_monthly);
+                    
+                    // Show/hide optional deductions
+                    document.getElementById('studentLoanRow').style.display = 
+                        result.result.student_loan_deduction > 0 ? 'flex' : 'none';
+                    document.getElementById('pensionRow').style.display = 
+                        result.result.pension_deduction > 0 ? 'flex' : 'none';
+                    
+                    // IMPORTANT: Update annual summary
+                    // All values in annual summary should be annual amounts
+                    document.getElementById('basicAnnual').textContent = formatCurrency(annualSalary);
+                    document.getElementById('variableAnnual').textContent = formatCurrency(monthlyVariable * 12);
+                    document.getElementById('nonMonthlyBonus').textContent = formatCurrency(trueBonus);
+                    document.getElementById('totalAnnual').textContent = formatCurrency(totalAnnual);
+                    
+                    // Update tax breakdown if available
+                    // These values should be monthly tax amounts per band
+                    if (result.result.tax_breakdown) {
+                        const breakdownHtml = Object.entries(result.result.tax_breakdown)
+                            .map(([band, amount], index) => `
+                                <div class="result-row">
+                                    <span>${band}</span>
+                                    <span>
+                                        <span id="taxBand_${index}">${formatCurrency(amount)}</span>
+                                    </span>
+                                </div>
+                            `).join('');
+                        document.getElementById('taxBands').innerHTML = breakdownHtml;
+                    }
+                    
+                    // Update status
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+                    document.getElementById('updateStatus').textContent = `Last updated at ${timeString}`;
+                } else {
+                    document.getElementById('updateStatus').textContent = `Error: ${result.error}`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('updateStatus').textContent = 'Error calculating taxes';
+            } finally {
+                isCalculating = false;
+            }
+        }
+
+        function updateMonthLabels() {
+            const months = [];
+            const today = new Date();
+            
+            for (let i = 2; i >= 0; i--) {
+                const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+                months.push(d.toLocaleString('default', { month: 'short', year: '2-digit' }));
+            }
+            
+            document.getElementById('month3Label').textContent = months[0];
+            document.getElementById('month2Label').textContent = months[1];
+            document.getElementById('month1Label').textContent = months[2];
+        }
+
+        function createAdditionalIncomeRow(id) {
+            const row = document.createElement('div');
+            row.className = 'income-row';
+            row.innerHTML = `
+                <div class="income-grid">
+                    <div>
+                        <input type="text" class="form-control form-control-sm income-name" 
+                               placeholder="Income Name" data-type="custom-${id}">
+                    </div>
+                    <div>
+                        <div class="income-values">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text">£</span>
+                                <input type="number" class="form-control" 
+                                       data-type="custom-${id}" data-month="2">
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text">£</span>
+                                <input type="number" class="form-control" 
+                                       data-type="custom-${id}" data-month="1">
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text">£</span>
+                                <input type="number" class="form-control" 
+                                       data-type="custom-${id}" data-month="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding-left: 15px; padding-right: 15px;">
+                        <select class="form-select form-select-sm calculation-method" data-type="custom-${id}" style="max-width: 120px;">
+                            <option value="average">Average</option>
+                            <option value="lowest">Lowest</option>
+                        </select>
+                        <button type="button" class="delete-btn" title="Remove this income row">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('additional-rows').appendChild(row);
+            
+            row.querySelector('.delete-btn').addEventListener('click', function() {
+                row.remove();
+                // Trigger recalculation when a row is removed
+                debounceCalculation();
+            });
+        }
+
+        function calculateAverages() {
+            const averages = {
+                total: 0,
+                items: {} // Store individual income items for breakdown
+            };
+            const types = ['bonus', 'overtime', 'commission'];
+            
+            // Calculate averages for standard types
+            types.forEach(type => {
+                const method = document.querySelector(`.calculation-method[data-type="${type}"]`).value;
+                const values = Array.from(document.querySelectorAll(`[data-type="${type}"][data-month]`))
+                    .map(input => parseFloat(input.value) || 0);
+                
+                if (values.some(v => v > 0)) {
+                    let monthlyValue = 0;
+                    if (method === 'average') {
+                        monthlyValue = values.reduce((a, b) => a + b, 0) / values.length;
+                    } else if (method === 'lowest') {
+                        monthlyValue = Math.min(...values.filter(v => v > 0)) || 0;
+                    }
+                    
+                    // Capitalize first letter for display
+                    const displayName = type.charAt(0).toUpperCase() + type.slice(1);
+                    averages.items[displayName] = monthlyValue;
+                    averages.total += monthlyValue;
+                }
+            });
+            
+            // Calculate averages for custom rows - using a different approach to avoid duplicates
+            const customTypes = {};
+            
+            // First get all unique custom type IDs
+            document.querySelectorAll('[data-type^="custom-"]').forEach(input => {
+                if (input.hasAttribute('data-month')) {
+                    const type = input.dataset.type;
+                    customTypes[type] = true;
+                }
+            });
+            
+            // Now process each unique custom type
+            Object.keys(customTypes).forEach(type => {
+                // Find the name input for this type - first element with this data-type without data-month
+                const nameElement = document.querySelector(`.income-name[data-type="${type}"]`);
+                const name = nameElement ? (nameElement.value || 'Other Income') : 'Other Income';
+                
+                const method = document.querySelector(`.calculation-method[data-type="${type}"]`).value;
+                const values = Array.from(document.querySelectorAll(`[data-type="${type}"][data-month]`))
+                    .map(input => parseFloat(input.value) || 0);
+                
+                if (values.some(v => v > 0)) {
+                    let monthlyValue = 0;
+                    if (method === 'average') {
+                        monthlyValue = values.reduce((a, b) => a + b, 0) / values.length;
+                    } else if (method === 'lowest') {
+                        monthlyValue = Math.min(...values.filter(v => v > 0)) || 0;
+                    }
+                    averages.items[name] = monthlyValue;
+                    averages.total += monthlyValue;
+                }
+            });
+            
+            return averages;
+        }
+
+        function setupDynamicCalculations() {
+            // Remove this function as we're handling initialization in window.onload
+        }
+
+        // Initialize calculator when DOM is loaded
+        window.onload = function() {
+            console.log('Window loaded, initializing calculator...');
+            initializeTheme(); // Initialize theme from cookie
+            updateMonthLabels();
+            setupBonusSection();
+            
+            // Setup Add Income button
+            document.getElementById('addIncomeRow').addEventListener('click', function() {
+                const id = Date.now(); // Use timestamp as unique ID
+                createAdditionalIncomeRow(id);
+                // Add event listeners to new inputs
+                document.querySelectorAll(`[data-type="custom-${id}"]`).forEach(input => {
+                    input.addEventListener('change', debounceCalculation);
+                    input.addEventListener('input', debounceCalculation);
+                });
+            });
+
+            // Setup theme toggle
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            
+            // Setup reset button
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Reset button clicked');
+                    // Reset all input fields
+                    document.querySelectorAll('input[type="number"]').forEach(input => {
+                        input.value = '';
+                    });
+                    // Reset all selects to first option
+                    document.querySelectorAll('select').forEach(select => {
+                        select.selectedIndex = 0;
+                    });
+                    // Reset Include/Exclude toggles
+                    resetVariableToggle(false);
+                    resetBonusToggle(false);
+                    document.getElementById('hasGraduateLoan').checked = false;
+                    document.getElementById('hasBonus').checked = false;
+                    // Hide bonus options
+                    document.getElementById('bonusOptions').style.display = 'none';
+                    // Reset annual/monthly view
+                    document.getElementById('basicMonthlyInputs').style.display = 'none';
+                    document.getElementById('basicAnnualInput').style.display = 'block';
+                    // Hide breakdowns but keep variable breakdown visible
+                    document.getElementById('variableBreakdown').style.display = 'block';
+                    document.getElementById('variableBreakdownIcon').classList.add('open');
+                    document.getElementById('deductionsBreakdown').style.display = 'none';
+                    document.getElementById('deductionsBreakdownIcon').classList.remove('open');
+                    
+                    // Remove all custom income rows
+                    document.getElementById('additional-rows').innerHTML = '';
+                    
+                    // Trigger calculation
+                    performCalculation();
+                });
+            }
+
+            // Setup variable breakdown toggle - start open by default
+            const variableBreakdownIcon = document.getElementById('variableBreakdownIcon');
+            const variableBreakdown = document.getElementById('variableBreakdown');
+            
+            // Show variable breakdown by default
+            variableBreakdown.style.display = 'block';
+            variableBreakdownIcon.classList.add('open');
+            
+            variableBreakdownIcon.addEventListener('click', function() {
+                const isVisible = variableBreakdown.style.display === 'block';
+                variableBreakdown.style.display = isVisible ? 'none' : 'block';
+                this.classList.toggle('open', !isVisible);
+            });
+            
+            // Setup annual variable breakdown toggle
+            const annualVariableBreakdownIcon = document.getElementById('annualVariableBreakdownIcon');
+            const annualVariableBreakdown = document.getElementById('annualVariableBreakdown');
+            
+            // Hide annual variable breakdown by default
+            annualVariableBreakdown.style.display = 'none';
+            
+            annualVariableBreakdownIcon.addEventListener('click', function() {
+                const isVisible = annualVariableBreakdown.style.display === 'block';
+                annualVariableBreakdown.style.display = isVisible ? 'none' : 'block';
+                this.classList.toggle('open', !isVisible);
+            });
+            
+            // Setup deductions breakdown toggle
+            const deductionsBreakdownIcon = document.getElementById('deductionsBreakdownIcon');
+            const deductionsBreakdown = document.getElementById('deductionsBreakdown');
+            
+            deductionsBreakdownIcon.addEventListener('click', function() {
+                const isVisible = deductionsBreakdown.style.display === 'block';
+                deductionsBreakdown.style.display = isVisible ? 'none' : 'block';
+                this.classList.toggle('open', !isVisible);
+            });
+
+            // Add event listeners for all input fields to trigger calculation
+            document.querySelectorAll('input[type="number"], select').forEach(input => {
+                input.addEventListener('change', debounceCalculation);
+            });
+            
+            // Initialize with a calculation to show the variable breakdown
+            performCalculation();
+
+            // Hide variable breakdown by default
+            variableBreakdown.style.display = 'none';
+            variableBreakdownIcon.classList.remove('open');
+        };
+
+        function calculateTrueBonus() {
+            const hasBonus = document.getElementById('hasBonus');
+            if (!hasBonus.checked) return 0;
+
+            const bonusType = document.getElementById('bonusType').value;
+            let bonusAmount = 0;
+
+            if (bonusType === 'annual') {
+                const previousYear = parseFloat(document.getElementById('previousYearBonus').value) || 0;
+                const currentYear = parseFloat(document.getElementById('currentYearBonus').value) || 0;
+                
+                if (currentYear > 0 && previousYear > 0) {
+                    bonusAmount = (previousYear + currentYear) / 2;
+                } else {
+                    bonusAmount = currentYear || previousYear;
+                }
+            } else if (bonusType === 'half-yearly') {
+                const previousHalf = parseFloat(document.getElementById('previousHalfBonus').value) || 0;
+                const currentHalf = parseFloat(document.getElementById('currentHalfBonus').value) || 0;
+                
+                if (currentHalf > 0 && previousHalf > 0) {
+                    bonusAmount = (previousHalf + currentHalf) * 2;  // Multiply by 2 for annual
+                } else {
+                    bonusAmount = (currentHalf || previousHalf) * 2;
+                }
+            } else {
+                const q1 = parseFloat(document.getElementById('q1Bonus').value) || 0;
+                const q2 = parseFloat(document.getElementById('q2Bonus').value) || 0;
+                const q3 = parseFloat(document.getElementById('q3Bonus').value) || 0;
+                const q4 = parseFloat(document.getElementById('q4Bonus').value) || 0;
+                
+                const method = document.getElementById('quarterlyBonusMethod').value;
+                const quarters = [q1, q2, q3, q4].filter(q => q > 0);
+                
+                if (quarters.length > 0) {
+                    if (method === 'last3') {
+                        // Take only the last 3 quarters if available
+                        const last3 = quarters.slice(0, 3);
+                        bonusAmount = ((last3.reduce((a, b) => a + b, 0) / last3.length) * 4);
+                    } else {
+                        // Average of all available quarters (up to 4)
+                        bonusAmount = ((quarters.reduce((a, b) => a + b, 0) / quarters.length) * 4);
+                    }
+                }
+            }
+
+            return bonusAmount;
+        }
+
+        function updateBonusInputs() {
+            const hasBonus = document.getElementById('hasBonus');
+            const bonusType = document.getElementById('bonusType');
+            const annualBonusInputs = document.getElementById('annualBonusInputs');
+            const halfYearlyBonusInputs = document.getElementById('halfYearlyBonusInputs');
+            const quarterlyBonusInputs = document.getElementById('quarterlyBonusInputs');
+
+            if (!hasBonus.checked) {
+                annualBonusInputs.style.display = 'none';
+                halfYearlyBonusInputs.style.display = 'none';
+                quarterlyBonusInputs.style.display = 'none';
+                return;
+            }
+
+            annualBonusInputs.style.display = 'none';
+            halfYearlyBonusInputs.style.display = 'none';
+            quarterlyBonusInputs.style.display = 'none';
+
+            switch(bonusType.value) {
+                case 'annual':
+                    annualBonusInputs.style.display = 'block';
+                    break;
+                case 'half-yearly':
+                    halfYearlyBonusInputs.style.display = 'block';
+                    break;
+                case 'quarterly':
+                    quarterlyBonusInputs.style.display = 'block';
+                    break;
+            }
+        }
+
+        function calculateVariableIncomeTotals() {
+            const types = ['bonus', 'overtime', 'commission'];
+            const totals = {
+                month1: 0,
+                month2: 0,
+                month3: 0
+            };
+            
+            // Calculate totals for standard types
+            types.forEach(type => {
+                for (let month = 0; month < 3; month++) {
+                    const value = parseFloat(document.querySelector(`[data-type="${type}"][data-month="${month}"]`).value) || 0;
+                    totals[`month${3-month}`] = value;
+                }
+            });
+            
+            // Calculate totals for custom rows
+            document.querySelectorAll('[data-type^="custom-"]').forEach(nameInput => {
+                const type = nameInput.dataset.type;
+                const name = nameInput.value || 'Other Income';
+                for (let month = 0; month < 3; month++) {
+                    const value = parseFloat(document.querySelector(`[data-type="${type}"][data-month="${month}"]`).value) || 0;
+                    totals[`month${3-month}`] += value;
+                }
+            });
+            
+            return totals;
+        }
+
+        // Remove automatic calculation triggers from other event listeners
+        function setupBonusSection() {
+            const hasBonus = document.getElementById('hasBonus');
+            const bonusOptions = document.getElementById('bonusOptions');
+            const bonusType = document.getElementById('bonusType');
+
+            hasBonus.addEventListener('change', function() {
+                bonusOptions.style.display = this.checked ? 'block' : 'none';
+                updateBonusInputs();
+            });
+
+            bonusType.addEventListener('change', function() {
+                updateBonusInputs();
+            });
+        }
+
+        async function updateTotalsForExclusions(excludeVariable, excludeBonus) {
+            const monthlyBasic = parseFloat(document.getElementById('monthlyBasic').textContent.replace('£', '').replace(',', '')) || 0;
+            const monthlyVariable = parseFloat(document.getElementById('monthlyVariable').textContent.replace('£', '').replace(',', '')) || 0;
+            const monthlyBonus = parseFloat(document.getElementById('monthlyNonMonthlyBonus').textContent.replace('£', '').replace(',', '')) || 0;
+
+            const totalMonthly = monthlyBasic + 
+                               (excludeVariable ? 0 : monthlyVariable) + 
+                               (excludeBonus ? 0 : monthlyBonus);
+
+            const totalAnnual = totalMonthly * 12;
+
+            // Update gross pay
+            document.getElementById('grossPay').textContent = formatCurrency(totalMonthly);
+
+            try {
+                // Prepare data for API call
+                const data = {
+                    salary: totalAnnual,
+                    pension: document.getElementById('pension').value,
+                    pensionType: document.getElementById('pensionType').value,
+                    studentLoan: document.getElementById('studentLoan').value,
+                    graduateLoan: document.getElementById('hasGraduateLoan').checked
+                };
+
+                // Make API call
+                const response = await fetch('/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Update tax-related figures
+                    document.getElementById('tax').textContent = formatCurrency(result.result.tax_deduction);
+                    document.getElementById('ni').textContent = formatCurrency(result.result.ni_deduction);
+                    document.getElementById('studentLoanAmount').textContent = formatCurrency(result.result.student_loan_deduction);
+                    document.getElementById('pensionAmount').textContent = formatCurrency(result.result.pension_deduction);
+                    
+                    // Calculate and display total deductions
+                    const totalDeductions = result.result.tax_deduction + 
+                                           result.result.ni_deduction + 
+                                           result.result.student_loan_deduction + 
+                                           result.result.pension_deduction;
+                    document.getElementById('totalDeductions').textContent = formatCurrency(totalDeductions);
+                    
+                    // Always show deductions icon
+                    document.getElementById('deductionsBreakdownIcon').style.display = 'inline-block';
+                    
+                    document.getElementById('netPay').textContent = formatCurrency(result.result.net_monthly);
+                    
+                    // Show/hide optional deductions
+                    document.getElementById('studentLoanRow').style.display = 
+                        result.result.student_loan_deduction > 0 ? 'flex' : 'none';
+                    document.getElementById('pensionRow').style.display = 
+                        result.result.pension_deduction > 0 ? 'flex' : 'none';
+
+                    // Update status
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+                    document.getElementById('updateStatus').textContent = `Last updated at ${timeString}`;
+                } else {
+                    document.getElementById('updateStatus').textContent = `Error: ${result.error}`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('updateStatus').textContent = 'Error updating calculations';
+            }
+        }
+
+        // Add this at the start of your script section
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        // Add dark mode initialization and toggle functionality
+        function initializeTheme() {
+            const savedTheme = getCookie('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.getElementById('themeText').textContent = 'Dark Mode';
+                document.getElementById('themeIcon').className = 'bi bi-moon-fill';
+            }
+        }
+
+        function toggleTheme() {
+            const root = document.documentElement;
+            const currentTheme = root.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? '' : 'dark';
+            
+            root.setAttribute('data-theme', newTheme);
+            setCookie('theme', newTheme, 365); // Save preference for 1 year
+            
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            
+            if (newTheme === 'dark') {
+                themeIcon.className = 'bi bi-moon-fill';
+                themeText.textContent = 'Dark Mode';
+            } else {
+                themeIcon.className = 'bi bi-sun-fill';
+                themeText.textContent = 'Light Mode';
+            }
+        }
+
+        // Update the toggle functions to work with the single toggle
+        function toggleVariable() {
+            // Get current state
+            const toggle = document.getElementById('variableToggle');
+            const track = toggle.querySelector('.toggle-switch-track');
+            const isCurrentlyIncluded = track.classList.contains('active');
+            const shouldExclude = isCurrentlyIncluded; // Toggle the state
+            
+            // Update visual state
+            toggle.classList.toggle('active', !shouldExclude);
+            track.classList.toggle('active', !shouldExclude);
+            
+            // Update hidden checkbox state (to maintain compatibility with existing code)
+            const hiddenExcludeVariable = document.getElementById('excludeVariable') || 
+                                          document.createElement('input');
+            if (!document.getElementById('excludeVariable')) {
+                hiddenExcludeVariable.type = 'checkbox';
+                hiddenExcludeVariable.id = 'excludeVariable';
+                hiddenExcludeVariable.style.display = 'none';
+                document.body.appendChild(hiddenExcludeVariable);
+            }
+            
+            hiddenExcludeVariable.checked = shouldExclude;
+            
+            // Update calculations
+            const excludeBonus = document.getElementById('excludeBonus')?.checked || false;
+            updateTotalsForExclusions(shouldExclude, excludeBonus);
+        }
+
+        function toggleBonus() {
+            // Get current state
+            const toggle = document.getElementById('bonusToggle');
+            const track = toggle.querySelector('.toggle-switch-track');
+            const isCurrentlyIncluded = track.classList.contains('active');
+            const shouldExclude = isCurrentlyIncluded; // Toggle the state
+            
+            // Update visual state
+            toggle.classList.toggle('active', !shouldExclude);
+            track.classList.toggle('active', !shouldExclude);
+            
+            // Update hidden checkbox state
+            const hiddenExcludeBonus = document.getElementById('excludeBonus') || 
+                                       document.createElement('input');
+            if (!document.getElementById('excludeBonus')) {
+                hiddenExcludeBonus.type = 'checkbox';
+                hiddenExcludeBonus.id = 'excludeBonus';
+                hiddenExcludeBonus.style.display = 'none';
+                document.body.appendChild(hiddenExcludeBonus);
+            }
+            
+            hiddenExcludeBonus.checked = shouldExclude;
+            
+            // Update calculations
+            const excludeVariable = document.getElementById('excludeVariable')?.checked || false;
+            updateTotalsForExclusions(excludeVariable, shouldExclude);
+        }
+
+        // Helper functions to reset toggles programmatically
+        function resetVariableToggle(shouldExclude) {
+            const toggle = document.getElementById('variableToggle');
+            const track = toggle.querySelector('.toggle-switch-track');
+            
+            toggle.classList.toggle('active', !shouldExclude);
+            track.classList.toggle('active', !shouldExclude);
+            
+            const hiddenExcludeVariable = document.getElementById('excludeVariable') || 
+                                          document.createElement('input');
+            if (!document.getElementById('excludeVariable')) {
+                hiddenExcludeVariable.type = 'checkbox';
+                hiddenExcludeVariable.id = 'excludeVariable';
+                hiddenExcludeVariable.style.display = 'none';
+                document.body.appendChild(hiddenExcludeVariable);
+            }
+            
+            hiddenExcludeVariable.checked = shouldExclude;
+        }
+
+        function resetBonusToggle(shouldExclude) {
+            const toggle = document.getElementById('bonusToggle');
+            const track = toggle.querySelector('.toggle-switch-track');
+            
+            toggle.classList.toggle('active', !shouldExclude);
+            track.classList.toggle('active', !shouldExclude);
+            
+            const hiddenExcludeBonus = document.getElementById('excludeBonus') || 
+                                       document.createElement('input');
+            if (!document.getElementById('excludeBonus')) {
+                hiddenExcludeBonus.type = 'checkbox';
+                hiddenExcludeBonus.id = 'excludeBonus';
+                hiddenExcludeBonus.style.display = 'none';
+                document.body.appendChild(hiddenExcludeBonus);
+            }
+            
+            hiddenExcludeBonus.checked = shouldExclude;
+        }
+
+        // Update variable income breakdown to show each custom income line
+        function updateVariableBreakdown(variableIncome) {
+            const breakdownContainer = document.getElementById('variableBreakdown');
+            const annualBreakdownContainer = document.getElementById('annualVariableBreakdown');
+            
+            // Always create a breakdown with at least the three standard income types
+            let breakdownHtml = '';
+            let annualBreakdownHtml = '';
+            const standardTypes = ['Bonus', 'Overtime', 'Commission'];
+            let totalAmount = 0;
+            
+            // Add each standard income type (even if zero)
+            standardTypes.forEach(type => {
+                const amount = (variableIncome && variableIncome.items && variableIncome.items[type]) || 0;
+                totalAmount += amount;
+                const annualAmount = amount * 12;
+                
+                // Monthly breakdown
+                breakdownHtml += `
+                    <div class="breakdown-item">
+                        <span>${type}</span>
+                        <span class="copyable-number" onclick="copyNumber(this)">
+                            <span>${formatCurrency(amount)}</span>
+                            <span class="copy-tooltip">Copied!</span>
+                        </span>
+                    </div>
+                `;
+                
+                // Annual breakdown
+                annualBreakdownHtml += `
+                    <div class="breakdown-item">
+                        <span>${type}</span>
+                        <span class="copyable-number" onclick="copyNumber(this)">
+                            <span>${formatCurrency(annualAmount)}</span>
+                            <span class="copy-tooltip">Copied!</span>
+                        </span>
+                    </div>
+                `;
+            });
+            
+            // Add each custom income type individually
+            if (variableIncome && variableIncome.items) {
+                const customItems = Object.entries(variableIncome.items)
+                    .filter(([name, _]) => !standardTypes.includes(name));
+                
+                // Only process if we have custom items
+                if (customItems.length > 0) {
+                    customItems.forEach(([name, amount]) => {
+                        if (amount > 0) {
+                            const annualAmount = amount * 12;
+                            
+                            // Monthly breakdown
+                            breakdownHtml += `
+                                <div class="breakdown-item">
+                                    <span>${name}</span>
+                                    <span class="copyable-number" onclick="copyNumber(this)">
+                                        <span>${formatCurrency(amount)}</span>
+                                        <span class="copy-tooltip">Copied!</span>
+                                    </span>
+                                </div>
+                            `;
+                            
+                            // Annual breakdown
+                            annualBreakdownHtml += `
+                                <div class="breakdown-item">
+                                    <span>${name}</span>
+                                    <span class="copyable-number" onclick="copyNumber(this)">
+                                        <span>${formatCurrency(annualAmount)}</span>
+                                        <span class="copy-tooltip">Copied!</span>
+                                    </span>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+            }
+            
+            // Add total
+            const annualTotal = totalAmount * 12;
+            
+            // Monthly total
+            breakdownHtml += `
+                <div class="breakdown-item fw-bold">
+                    <span>Total</span>
+                    <span class="copyable-number" onclick="copyNumber(this)">
+                        <span>${formatCurrency(totalAmount)}</span>
+                        <span class="copy-tooltip">Copied!</span>
+                    </span>
+                </div>
+            `;
+            
+            // Annual total
+            annualBreakdownHtml += `
+                <div class="breakdown-item fw-bold">
+                    <span>Total</span>
+                    <span class="copyable-number" onclick="copyNumber(this)">
+                        <span>${formatCurrency(annualTotal)}</span>
+                        <span class="copy-tooltip">Copied!</span>
+                    </span>
+                </div>
+            `;
+            
+            // Update both breakdowns
+            breakdownContainer.innerHTML = breakdownHtml;
+            annualBreakdownContainer.innerHTML = annualBreakdownHtml;
+        }
+
+        document.getElementById('basicSalaryType').addEventListener('change', function() {
+            const annualInput = document.getElementById('basicAnnualInput');
+            const monthlyInputs = document.getElementById('basicMonthlyInputs');
+            
+            if (this.value === 'monthly') {
+                annualInput.style.display = 'none';
+                monthlyInputs.style.display = 'block';
+                
+                // Copy the annual value divided by 12 to all monthly inputs if annual has a value
+                const annualValue = parseFloat(document.getElementById('basicAnnualSalary').value) || 0;
+                if (annualValue > 0) {
+                    const monthlyValue = annualValue / 12;
+                    document.querySelectorAll('[data-type="basic"][data-month]').forEach(input => {
+                        input.value = monthlyValue.toFixed(2);
+                    });
+                }
+            } else {
+                annualInput.style.display = 'block';
+                monthlyInputs.style.display = 'none';
+                
+                // Calculate average of monthly values and multiply by 12 for annual
+                const monthlyInputValues = Array.from(document.querySelectorAll('[data-type="basic"][data-month]'))
+                    .map(input => parseFloat(input.value) || 0);
+                
+                if (monthlyInputValues.some(v => v > 0)) {
+                    const average = monthlyInputValues.reduce((a, b) => a + b, 0) / monthlyInputValues.length;
+                    document.getElementById('basicAnnualSalary').value = (average * 12).toFixed(2);
+                }
+            }
+            
+            // Trigger calculation update
+            debounceCalculation();
+        });
+
+        // Update the monthly inputs to trigger calculation
+        document.querySelectorAll('[data-type="basic"][data-month]').forEach(input => {
+            input.addEventListener('input', debounceCalculation);
+        });
+
+        function copyNumber(element) {
+            const numberElement = element.querySelector('span:first-child');
+            const tooltip = element.querySelector('.copy-tooltip');
+            const textToCopy = numberElement.textContent;
+            
+            // Create temporary textarea
+            const textarea = document.createElement('textarea');
+            textarea.value = textToCopy;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            
+            // Show tooltip
+            tooltip.classList.add('show');
+            setTimeout(() => {
+                tooltip.classList.remove('show');
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
