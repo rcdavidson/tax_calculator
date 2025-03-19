@@ -6,6 +6,8 @@
     <title>UK Tax Calculator 2023/24</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Add Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         :root {
             /* Light mode colors */
@@ -2004,7 +2006,7 @@
     </div>
 
     <div class="text-center mt-4 mb-2" style="font-size: 0.8rem; color: #999;">
-        <a href="#" id="versionLink" style="color: #999; text-decoration: none;">Version 2.0.3</a>
+        <a href="#" id="versionLink" style="color: #999; text-decoration: none;" data-bs-toggle="modal" data-bs-target="#changelogModal">Version 2.0.3</a>
         
         <!-- Changelog Modal -->
         <div class="modal fade" id="changelogModal" tabindex="-1" aria-labelledby="changelogModalLabel" aria-hidden="true">
@@ -3052,6 +3054,25 @@
             var myModal = new bootstrap.Modal(document.getElementById('changelogModal'));
             myModal.show();
         });
+
+        // Determine if this is the mobile or desktop version
+        function isMobileView() {
+            return window.innerWidth < 768;
+        }
+        
+        // Sync basic salary type between desktop and mobile versions
+        function setupBasicSalaryTypeSync() {
+            document.getElementById('basicSalaryType').addEventListener('change', function() {
+                document.getElementById('basicSalaryTypeDesktop').value = this.value;
+            });
+            
+            document.getElementById('basicSalaryTypeDesktop').addEventListener('change', function() {
+                document.getElementById('basicSalaryType').value = this.value;
+                document.getElementById('basicSalaryType').dispatchEvent(new Event('change'));
+            });
+        }
+
+        // Remove the changelog modal code that's no longer needed
     </script>
 </body>
 </html>
