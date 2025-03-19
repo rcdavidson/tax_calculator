@@ -3055,6 +3055,19 @@
             myModal.show();
         });
 
+        // Fix modal backdrop issue
+        document.getElementById('changelogModal').addEventListener('hidden.bs.modal', function () {
+            // Remove any lingering backdrop
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(backdrop => {
+                backdrop.remove();
+            });
+            // Reset body styles
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        });
+
         // Determine if this is the mobile or desktop version
         function isMobileView() {
             return window.innerWidth < 768;
@@ -3071,8 +3084,6 @@
                 document.getElementById('basicSalaryType').dispatchEvent(new Event('change'));
             });
         }
-
-        // Remove the changelog modal code that's no longer needed
     </script>
 </body>
 </html>
