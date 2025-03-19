@@ -158,18 +158,17 @@
         
         /* Improved input styling */
         .input-group-text {
-            background-color: #edf2ff;
-            border: 1px solid #cbd5e0;
-            color: #4a5568;
+            background-color: var(--accent-color);
+            border: 1px solid var(--input-border);
+            color: var(--text-color);
+            border-right: none;
+            font-size: 14px;
+            height: 100%;
+            padding: 0.375rem 0.5rem;
             border-top-left-radius: 8px;
             border-bottom-left-radius: 8px;
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
-            padding: 0.5rem 0.75rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            height: 100%;
         }
         
         .form-control {
@@ -383,6 +382,7 @@
             font-size: 14px;
             display: inline-flex;
             align-items: center;
+            gap: 5px;
             margin-top: 15px;
             cursor: pointer;
         }
@@ -1214,6 +1214,255 @@
             border-bottom-left-radius: 0 !important;
             border-left: 0;
         }
+
+        .form-select {
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            background-color: #fff;
+            height: 100%;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        /* Fix for the income name input field in picture 2 */
+        .income-name {
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            width: 100%;
+        }
+
+        /* Fix for the pension contribution styling */
+        .input-pension-container {
+            display: flex;
+            align-items: stretch;
+            width: 100%;
+            height: 38px;
+        }
+
+        .input-pension-container .input-group-text {
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            height: 100%;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .input-pension-container .form-control {
+            border-radius: 0;
+            border-right: 0;
+            flex: 1;
+            height: 100%;
+        }
+
+        .input-pension-container .form-select {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+            width: auto;
+            min-width: 70px;
+            height: 100%;
+        }
+
+        /* Ensure consistent heights for inputs and dropdowns in the same row */
+        .month-values > div,
+        .income-values > div {
+            height: 100%;
+        }
+
+        .month-values .input-group,
+        .income-values .input-group,
+        .month-values .form-select,
+        .income-values .form-select {
+            height: 100%;
+        }
+
+        /* Fix for picture 3 misalignment with the hidden boxes */
+        #annualBonusInputs .input-group,
+        #halfYearBonusInputs .input-group,
+        #quarterlyBonusInputs .input-group {
+            height: 38px;
+        }
+
+        /* Fix for properly curved borders on all inputs */
+        .month-values .input-group > .input-group-text,
+        .income-values .input-group > .input-group-text {
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        
+        .month-values .input-group > .form-control,
+        .income-values .input-group > .form-control {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        /* Make dropdowns match input width */
+        .form-select {
+            width: 100%;
+            height: 38px;
+        }
+
+        /* Fix for income name input in picture 2 */
+        .income-name {
+            border-radius: 8px;
+            width: 100%;
+            height: 38px;
+            padding: 0.5rem 0.75rem;
+        }
+
+        /* Ensure consistent input heights */
+        .input-group, .form-control, .form-select, .input-pension-container {
+            height: 38px;
+        }
+
+        /* Fix picture 3 alignment with wider dropdowns */
+        #annualBonusInputs .form-select, 
+        #halfYearBonusInputs .form-select,
+        #quarterlyBonusInputs .form-select {
+            width: 100%;
+        }
+
+        /* COMPREHENSIVE FIX FOR ALL VISUAL ISSUES */
+        
+        /* 1. Fix curved borders on all currency inputs */
+        .input-group-text {
+            background-color: var(--accent-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-right: none;
+            font-size: 14px;
+            height: 100%;
+            padding: 0.375rem 0.5rem;
+            border-top-left-radius: 8px !important;
+            border-bottom-left-radius: 8px !important;
+            border-top-right-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-control {
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 0.75rem;
+            background-color: var(--input-bg);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+            height: 38px;
+            font-size: 14px;
+        }
+        
+        /* Input in input groups */
+        .input-group > .form-control {
+            border-top-left-radius: 0 !important;
+            border-bottom-left-radius: 0 !important;
+            border-top-right-radius: 8px !important;
+            border-bottom-right-radius: 8px !important;
+        }
+        
+        /* 2. Make dropdowns match width of input fields */
+        .form-select {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            background-color: var(--input-bg);
+            height: 38px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+            width: 100%;
+            font-size: 14px;
+        }
+        
+        /* 3. Fix income name input in picture 2 */
+        .income-name {
+            border-radius: 8px;
+            width: 100%;
+            height: 38px;
+            padding: 0.375rem 0.75rem;
+            font-size: 14px;
+        }
+        
+        /* 4. Fix pension contribution container */
+        .input-pension-container {
+            display: flex;
+            align-items: stretch;
+            width: 100%;
+            height: 38px;
+        }
+        
+        .input-pension-container .input-group-text {
+            border-top-left-radius: 8px !important;
+            border-bottom-left-radius: 8px !important;
+            border-top-right-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+            height: 100%;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .input-pension-container .form-control {
+            border-radius: 0 !important;
+            border-right: 0;
+            flex: 1;
+            height: 100%;
+        }
+        
+        .input-pension-container .form-select {
+            border-top-left-radius: 0 !important;
+            border-bottom-left-radius: 0 !important;
+            border-top-right-radius: 8px !important;
+            border-bottom-right-radius: 8px !important;
+            width: auto;
+            min-width: 70px;
+            height: 100%;
+        }
+        
+        /* 5. Fix hidden boxes alignment in picture 3 */
+        #annualBonusInputs .input-group,
+        #halfYearBonusInputs .input-group,
+        #quarterlyBonusInputs .input-group {
+            height: 38px;
+        }
+        
+        /* Ensure all inputs, dropdowns, and containers have consistent height */
+        .input-group, 
+        .form-control, 
+        .form-select, 
+        .input-pension-container {
+            height: 38px;
+        }
+        
+        /* Additional income row styling */
+        .income-row {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 12px;
+            overflow: hidden;
+            padding: 15px;
+        }
+        
+        /* Fix for income values alignment */
+        .income-values {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            align-items: stretch;
+        }
+        
+        .income-values > div {
+            height: 38px;
+        }
     </style>
 </head>
 <body>
@@ -1754,6 +2003,40 @@
         </div>
     </div>
 
+    <div class="text-center mt-4 mb-2" style="font-size: 0.8rem; color: #999;">
+        <a href="#" id="versionLink" style="color: #999; text-decoration: none;">Version 2.0.3</a>
+        
+        <!-- Changelog Modal -->
+        <div class="modal fade" id="changelogModal" tabindex="-1" aria-labelledby="changelogModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="changelogModalLabel">Changelog</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h6>Version 2.0.3</h6>
+                        <ul>
+                            <li>Fixed curved borders on all currency inputs</li>
+                            <li>Made dropdown boxes match the size of input boxes</li>
+                            <li>Fixed income name input styling</li>
+                            <li>Improved pension contribution input styling</li>
+                            <li>Fixed alignment issues with hidden boxes</li>
+                            <li>Ensured consistent form element styling throughout the application</li>
+                        </ul>
+                        <h6>Version 2.0.2</h6>
+                        <ul>
+                            <li>Visual improvements</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script>
         const form = document.getElementById('calculatorForm');
         const results = document.getElementById('results');
@@ -2762,9 +3045,13 @@
                 document.getElementById('basicSalaryType').dispatchEvent(new Event('change'));
             });
         }
+
+        // Changelog modal
+        document.getElementById('versionLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            var myModal = new bootstrap.Modal(document.getElementById('changelogModal'));
+            myModal.show();
+        });
     </script>
-    <div class="text-center mt-4 mb-2" style="font-size: 0.8rem; color: #999;">
-        Version 2.0.2 (Visual Improvements)
-    </div>
 </body>
 </html>
