@@ -159,19 +159,26 @@
         /* Improved input styling */
         .input-group-text {
             background-color: #edf2ff;
-            border-color: #cbd5e0;
+            border: 1px solid #cbd5e0;
             color: #4a5568;
-            border-radius: 8px 0 0 8px;
-            border-right: none;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
             padding: 0.5rem 0.75rem;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            height: 100%;
         }
         
         .form-control {
-            border-color: #cbd5e0;
-            border-radius: 0 8px 8px 0;
+            border: 1px solid #cbd5e0;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
             padding: 0.5rem 0.75rem;
-            border-left: none;
             background-color: #fff;
             box-shadow: var(--shadow-sm);
             transition: all 0.2s ease;
@@ -251,19 +258,21 @@
 
         /* Make input groups more mobile-friendly */
         .input-group-sm {
-            width: 100%;
+            height: auto;
+        }
+        
+        .input-group-sm > .input-group-text,
+        .input-group-sm > .form-control {
+            font-size: 14px;
+            height: auto;
         }
         
         .income-type-label {
-            font-size: 14px;
-            padding-top: 6px;
-            font-weight: normal;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-right: 10px;
-            margin-bottom: 0;
-            display: inline-block;
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #4361ee;
+            padding-left: 10px;
         }
         
         .method-label {
@@ -1169,6 +1178,42 @@
                 margin-bottom: 15px;
             }
         }
+
+        /* Standardize form controls and input groups */
+        .form-control, .form-select {
+            font-size: 14px;
+            border: 1px solid #cbd5e0;
+        }
+        
+        /* Make all input-group instances consistent */
+        .input-group, .input-pension-container {
+            display: flex;
+            align-items: stretch;
+            width: 100%;
+        }
+        
+        .input-group > .input-group-text {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            font-size: 14px;
+            border: 1px solid #cbd5e0;
+            border-right: 0;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+            background-color: #edf2ff;
+            color: #4a5568;
+        }
+        
+        .input-group > .form-control {
+            flex: 1 1 auto;
+            min-width: 0;
+            border-top-right-radius: 8px !important;
+            border-bottom-right-radius: 8px !important;
+            border-top-left-radius: 0 !important;
+            border-bottom-left-radius: 0 !important;
+            border-left: 0;
+        }
     </style>
 </head>
 <body>
@@ -1403,9 +1448,10 @@
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <label class="form-label">Pension Contribution</label>
-                                <div class="input-group">
+                                <div class="input-pension-container">
+                                    <span class="input-group-text">£</span>
                                     <input type="number" class="form-control" id="pension" value="0" min="0">
-                                    <select class="form-select" id="pensionType" style="max-width: 80px;">
+                                    <select class="form-select" id="pensionType">
                                         <option value="percentage">%</option>
                                         <option value="amount">£</option>
                                     </select>
@@ -2718,7 +2764,7 @@
         }
     </script>
     <div class="text-center mt-4 mb-2" style="font-size: 0.8rem; color: #999;">
-        Version 2.0.1 (Dark Mode Fix)
+        Version 2.0.2 (Visual Improvements)
     </div>
 </body>
 </html>
